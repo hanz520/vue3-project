@@ -3,6 +3,12 @@ import { ref } from 'vue'
 
 defineProps<{ msg: string }>()
 
+let a = 5
+
+const add = (cc: number) => {
+  return cc + 10
+}
+
 const count = ref(0)
 </script>
 

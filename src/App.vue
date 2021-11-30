@@ -17,7 +17,7 @@ import HelloWorld from './components/HelloWorld.vue'
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-  a{
+  a {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
   }
 }
