@@ -4,7 +4,6 @@ import { ref } from 'vue'
 defineProps<{ msg: string }>()
 
 let a = 5
-
 const add = (cc: number) => {
   return cc + 10
 }
@@ -25,9 +24,7 @@ const count = ref(0)
   <p>See <code>README.md</code> for more information.</p>
 
   <p>
-    <a href="https://vitejs.dev/guide/features.html" target="_blank">
-      Vite Docs
-    </a>
+    <a href="https://vitejs.dev/guide/features.html" target="_blank"> Vite Docs </a>
     |
     <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
   </p>

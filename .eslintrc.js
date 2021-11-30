@@ -13,19 +13,26 @@ module.exports = {
   ],
   plugins: ['prettier'],
   parserOptions: {
-    ecmaVersion: 2017
+    parser: '@typescript-eslint/parser'
+    // ecmaVersion: 2017
   },
   rules: {
-    'prettier/prettier': 1,
-    'arrow-body-style': 'off',
-    'prefer-arrow-callback': 'off'
+    'prettier/prettier': [
+      1,
+      {
+        printWidth: 120,
+        singleQuote: true,
+        semi: false,
+        arrowParens: 'always',
+        jsxBracketSameLine: true,
+        trailingComma: 'none',
+        endOfLine: 'auto'
+      }
+    ]
   },
   overrides: [
     {
-      files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)'
-      ],
+      files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
       env: {
         mocha: true
       }
