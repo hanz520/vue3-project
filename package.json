@@ -4,13 +4,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "prepare": "husky install"
   },
   "dependencies": {
     "vue": "^3.2.16"
   },
   "devDependencies": {
+    "@commitlint/cli": "^15.0.0",
+    "@commitlint/config-conventional": "^15.0.0",
     "@vitejs/plugin-vue": "^1.9.3",
+    "husky": "^7.0.4",
     "sass": "^1.43.5",
     "typescript": "^4.4.3",
     "vite": "^2.6.4",
