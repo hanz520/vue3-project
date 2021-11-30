@@ -19,6 +19,7 @@ import HelloWorld from './components/HelloWorld.vue'
   margin-top: 60px;
   a {
     text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    color: $orange;
   }
 }
 </style>

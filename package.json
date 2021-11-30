@@ -5,6 +5,7 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
+    "preview": "vite preview --port 8866",
     "prepare": "husky install",
     "lint": "eslint --fix --ext .js --ext .ts --ext .jsx --ext .vue src/"
   },
