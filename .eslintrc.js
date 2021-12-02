@@ -3,20 +3,20 @@ module.exports = {
   env: {
     node: true
   },
+  // plugins: ['prettier'],
   extends: [
-    'plugin:vue/vue3-essential',
     'eslint:recommended',
-    '@vue/typescript/recommended',
-    'prettier',
-    '@vue/prettier',
-    '@vue/prettier/@typescript-eslint'
+    'plugin:vue/vue3-strongly-recommended',
+    '@vue/typescript/recommended', // 等同于 @vue/eslint-config-typescript/recommended
+    '@vue/prettier' // 等同于 @vue/eslint-config-prettier
+    // '@vue/prettier/@typescript-eslint'
   ],
-  plugins: ['prettier'],
   parserOptions: {
-    parser: '@typescript-eslint/parser'
-    // ecmaVersion: 2017
+    // parser: '@typescript-eslint/parser'    // 在@vue/typescript里面已经引入，所以无需重复
+    // ecmaVersion: 2020
   },
   rules: {
+    'spaced-comment': 1, // 强制在注释中 // 或 /* 使用一致的空格
     'prettier/prettier': [
       1,
       {
@@ -30,14 +30,14 @@ module.exports = {
       }
     ]
   },
-  overrides: [
-    {
-      files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
-      env: {
-        mocha: true
-      }
-    }
-  ],
+  // overrides: [
+  //   {
+  //     files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
+  //     env: {
+  //       mocha: true
+  //     }
+  //   }
+  // ],
   globals: {
     defineProps: 'readonly'
   }
