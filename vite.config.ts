@@ -11,6 +11,17 @@ export default defineConfig({
       '@': path.join(__dirname, 'src')
     }
   },
+  server: {
+    port: 1231,
+    strictPort: true,
+    proxy: {
+      '/api': {
+        target: 'http://jsonplaceholder.typicode.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  },
   css: {
     preprocessorOptions: {
       scss: {
