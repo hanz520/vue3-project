@@ -10,21 +10,25 @@
     "lint": "eslint --fix --ext .js --ext .ts --ext .jsx --ext .vue src/"
   },
   "dependencies": {
-    "vue": "^3.2.16"
+    "@vueuse/core": "^7.1.2",
+    "ant-design-vue": "^2.2.8",
+    "normalize.css": "^8.0.1",
+    "vue": "^3.2.16",
+    "vue-router": "^4.0.12"
   },
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
     "@commitlint/config-conventional": "^15.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
     "@vitejs/plugin-vue": "^1.9.3",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^9.1.0",
     "eslint": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.1.1",
-    "@typescript-eslint/eslint-plugin": "^5.5.0",
-    "@typescript-eslint/parser": "^5.5.0",
-    "prettier": "^2.5.0",
     "husky": "^7.0.4",
+    "prettier": "^2.5.0",
     "sass": "^1.43.5",
     "typescript": "^4.4.3",
     "vite": "^2.6.4",
