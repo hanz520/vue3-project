@@ -6,7 +6,7 @@ module.exports = {
   // plugins: ['prettier'],
   extends: [
     'eslint:recommended',
-    'plugin:vue/vue3-strongly-recommended',
+    'plugin:vue/vue3-recommended',
     '@vue/typescript/recommended', // 等同于 @vue/eslint-config-typescript/recommended
     '@vue/prettier' // 等同于 @vue/eslint-config-prettier
     // '@vue/prettier/@typescript-eslint'
@@ -17,6 +17,8 @@ module.exports = {
   },
   rules: {
     'spaced-comment': 1, // 强制在注释中 // 或 /* 使用一致的空格
+    'vue/multi-word-component-names': 0,
+    '@typescript-eslint/no-explicit-any': 0,
     'prettier/prettier': [
       1,
       {
