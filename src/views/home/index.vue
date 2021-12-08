@@ -10,7 +10,7 @@ import useStorage from '../../composition/hooks/useStorage'
 
 const storage = useStorage()
 
-storage.setItem('name', 'hanz')
+// storage.setItem('name', 'hanz')
 const changeFn = () => {
   storage.setZoneName('hanzZone')
 }

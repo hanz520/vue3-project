@@ -1,10 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
+import { useUserStore } from '../store'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/home'
   },
   {
     path: '/login',
@@ -16,16 +17,20 @@ const routes: RouteRecordRaw[] = [
     name: 'home',
     component: () => import('@/views/home/index.vue')
   }
-  // {
-  //   path: '/contextMenu',
-  //   name: '右键菜单模板',
-  //   component: () => import('@/component/baseDiagram/ContextMenu.vue')
-  // }
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  const { logged } = useUserStore()
+  // 如果是前往登录页，或者没找到登录信息，跳转登录页
+  if (to.name !== 'login' && !logged) {
+    next({ name: 'login' })
+  } else {
+    next()
+  }
+})
 export default router

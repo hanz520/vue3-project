@@ -8,7 +8,13 @@
           <a-input v-model:value="loginData.username" :maxlength="16" placeholder="用户名" />
         </a-form-item>
         <a-form-item name="password">
-          <a-input v-model:value="loginData.password" :type="passwordType" :maxlength="16" placeholder="密码">
+          <a-input
+            v-model:value="loginData.password"
+            :type="passwordType"
+            :maxlength="16"
+            placeholder="密码"
+            @keydown.enter="submit"
+          >
             <template #suffix>
               <svg-icon class="password-see" :href="iconHref" @click="toggle" />
             </template>
@@ -45,6 +51,7 @@ import { Form, Modal } from 'ant-design-vue'
 import type { LoginData, rulesType } from './index'
 import { isEqual } from 'lodash'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../../store'
 const router = useRouter()
 
 /**
@@ -116,6 +123,14 @@ const submit = async () => {
       })
       return false
     }
+    const userStore = useUserStore()
+    const userInfo = {
+      username: 'admin',
+      role: 'admin',
+      id: '0000001',
+      token: 'e6295f22b0644e06b186462d88bbf490'
+    }
+    userStore.setUserInfo(userInfo)
     router.push({
       name: 'home'
     })

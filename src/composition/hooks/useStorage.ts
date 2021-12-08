@@ -49,11 +49,11 @@ export interface StorageController {
    */
   list: () => any
   /**
-   * @function list 查看所有的数据
+   * @function show 查看所有的数据
    */
   show: () => void
   /**
-   * @function list 自定义数据控件的名称，默认为dataZone
+   * @function setZoneName 自定义数据空间的名称，默认为dataZone，改不改其实没什么卵用，适用于强迫症患者
    */
   setZoneName: (zoneName: string) => void
 }
@@ -86,9 +86,9 @@ export default function useStorage(): StorageController {
    * @param type
    */
   const getName = (type: StorageType) => {
-    const dataName: string = type == 'login' ? 'Login' : type == 'permanent' ? 'Permanent' : 'Session'
+    const dataName: string = getPrefix() + titleCase(type)
     const storage = type == 'session' ? SS : LS
-    return { dataName: getPrefix() + dataName, storage }
+    return { dataName: dataName, storage }
   }
 
   const setItem: SetItemType = (name, value, type = 'login') => {
@@ -135,12 +135,16 @@ export default function useStorage(): StorageController {
     }
   }
   const show = () => {
-    console.info(getPrefix() + 'Permanent', JSON.parse(LS.getItem(getName('permanent').dataName) as string))
-    console.info(getPrefix() + 'Login', JSON.parse(LS.getItem(getName('login').dataName) as string))
-    console.info(getPrefix() + 'Session', JSON.parse(SS.getItem(getName('session').dataName) as string))
+    const showObj = list()
+    for (const key in showObj) {
+      console.info(key, showObj[key])
+    }
   }
 
   const setZoneName = (zoneName: string) => {
+    if (zoneName === getPrefix()) {
+      return false
+    }
     Object.keys(storageType).forEach((type) => {
       const { dataName, storage } = getName(<StorageType>type)
       const storageData = storage.getItem(dataName)
