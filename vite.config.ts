@@ -16,7 +16,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       '/api': {
-        target: 'http://jsonplaceholder.typicode.com',
+        target: 'http://openapi.music.163.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

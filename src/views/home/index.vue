@@ -6,6 +6,7 @@
 </template>
 
 <script lang="ts" setup>
+import { TestApi } from '../../api'
 import useStorage from '../../composition/hooks/useStorage'
 
 const storage = useStorage()
@@ -17,9 +18,11 @@ const changeFn = () => {
 const addFn = () => {
   storage.setItem('work', 'IT')
 }
-const viewFn = () => {
-  console.log(storage.list())
-  storage.show()
+const viewFn = async () => {
+  // console.log(storage.list())
+  // storage.show()
+  const res = await TestApi
+  console.log(res)
 }
 </script>
 <style lang="scss" scoped></style>
