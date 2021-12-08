@@ -44,6 +44,8 @@ import captchaImg from './captcha.png'
 import { Form, Modal } from 'ant-design-vue'
 import type { LoginData, rulesType } from './index'
 import { isEqual } from 'lodash'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 /**
  * 控制密码是否可显示
@@ -57,7 +59,7 @@ const passwordType: ComputedRef<string> = computed(() => {
 })
 
 /**
- * todo: 登录失败三次，显示验证码
+ *  登录失败三次，显示验证码
  */
 const [failTime, { plus: addFailTime }] = useCount(0)
 const showCaptcha = computed(() => {
@@ -95,8 +97,8 @@ const rules = computed(() => {
 })
 
 const loginData: UnwrapRef<LoginData> = reactive({
-  username: 'admin',
-  password: 'admin111'
+  username: '',
+  password: ''
 })
 const [btnLoading, { set: setBtnLoading }] = useFlag(false)
 const submit = async () => {
@@ -114,7 +116,9 @@ const submit = async () => {
       })
       return false
     }
-    // todo: 跳转到主页
+    router.push({
+      name: 'home'
+    })
   }
 }
 </script>

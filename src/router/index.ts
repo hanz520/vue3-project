@@ -10,13 +10,12 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     name: 'login',
     component: () => import('@/views/login/Login.vue')
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: () => import('@/views/home/index.vue')
   }
-  // {
-  //   path: '/home',
-  //   name: 'home',
-  //   component: () => import('@/layout/Layout.vue')
-  //   // ]
-  // },
   // {
   //   path: '/contextMenu',
   //   name: '右键菜单模板',
