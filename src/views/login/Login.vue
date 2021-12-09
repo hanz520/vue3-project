@@ -44,14 +44,14 @@
 <script lang="ts" setup>
 import { reactive, computed, ref, toRaw } from 'vue'
 import type { ComputedRef, UnwrapRef, Ref } from 'vue'
-import useFlag from '../../composition/hooks/useFlag'
-import useCount from '../../composition/hooks/useCount'
 import captchaImg from './captcha.png'
 import { Form, Modal } from 'ant-design-vue'
-import type { LoginData, rulesType } from './index'
+import type { LoginData, rulesType } from './type/index'
 import { isEqual } from 'lodash'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '../../store'
+import useFlag from '@/composition/hooks/useFlag'
+import useCount from '@/composition/hooks/useCount'
+import { useUserStore } from '@/store'
 const router = useRouter()
 
 /**
