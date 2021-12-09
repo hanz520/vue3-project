@@ -4,12 +4,12 @@ import { requestResolve } from './requestHandler'
 import { responseResolve } from './responseHandler'
 import { errorHandler } from './errorHandler'
 
-const service = axios.create(axiosConfig)
+const baseApi = axios.create(axiosConfig)
 
 // 请求拦截器
-service.interceptors.request.use(requestResolve, errorHandler)
+baseApi.interceptors.request.use(requestResolve, errorHandler)
 
 // 响应拦截器
-service.interceptors.response.use(responseResolve, errorHandler)
+baseApi.interceptors.response.use(responseResolve, errorHandler)
 
-export default service
+export default baseApi
