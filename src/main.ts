@@ -8,7 +8,7 @@ import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import router from './router'
 
-import SvgIcon from '@/components/SvgIcon/index.vue'
+import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
 
 const app = createApp(App)
 

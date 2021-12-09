@@ -1,6 +1,6 @@
 <template>
   <svg class="svg-icon" aria-hidden="true">
-    <use :xlink:href="href"></use>
+    <use :xlink:href="hrefFormatter"></use>
   </svg>
 </template>
 
@@ -8,12 +8,12 @@
 import { withDefaults, computed } from 'vue'
 
 interface propsType {
-  href?: string
+  href: string
 }
 const props = withDefaults(defineProps<propsType>(), {
   href: 'icon-smile'
 })
-const href = computed(() => {
+const hrefFormatter = computed(() => {
   return `#${props.href}`
 })
 </script>
