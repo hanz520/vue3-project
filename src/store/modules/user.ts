@@ -26,7 +26,8 @@ export const useUserStore = defineStore({
   },
   getters: {
     username: (state: UserState) => state.userInfo?.username,
-    logged: ({ userInfo }: UserState) => userInfo !== null
+    logged: ({ userInfo }: UserState) => userInfo !== null,
+    token: ({ userInfo }: UserState) => userInfo?.token
   },
   actions: {
     // 设置用户信息
