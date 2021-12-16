@@ -5,18 +5,24 @@ import { useUserStore } from '../store'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/home'
+    // redirect: '/home',
+    component: () => import('@/layout/Layout.vue')
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('@/views/login/Login.vue')
-  },
-  {
-    path: '/home',
-    name: 'home',
-    component: () => import('@/views/home/index.vue')
   }
+  // {
+  //   path: '/',
+  //   name: 'home',
+  //   component: () => import('@/layout/Layout.vue')
+  // }
+  // {
+  //   path: '/home',
+  //   name: 'home',
+  //   component: () => import('@/views/home/Home.vue')
+  // },
 ]
 
 const router = createRouter({

@@ -132,7 +132,7 @@ const submit = async () => {
     }
     userStore.setUserInfo(userInfo)
     router.push({
-      name: 'home'
+      path: '/'
     })
   }
 }

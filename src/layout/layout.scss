@@ -1,0 +1,23 @@
+$namespace: 'app';
+@mixin b($block) {
+  $B: $namespace + '-' + $block;
+  .#{$B} {
+    @content;
+  }
+}
+
+@include b(wrap) {
+  width: 100%;
+  height: 100%;
+  background: lightblue;
+  display: flex;
+}
+
+@include b(side) {
+  width: 100%;
+  height: 100%;
+  background: lightblue;
+  display: flex;
+}
+
+
