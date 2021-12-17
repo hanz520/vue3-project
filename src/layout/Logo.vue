@@ -1,5 +1,8 @@
 <template>
-  <div class="app-logo"><img src="@/assets/logo.svg" />数据管理中心</div>
+  <div class="app-logo">
+    <span class="app-logo__icon"><img src="@/assets/logo.svg" /></span>
+    <span class="app-logo__title">数据管理中心</span>
+  </div>
 </template>
 
 <script lang="ts" setup></script>
@@ -11,11 +14,22 @@
   text-align: center;
   line-height: 50px;
   color: $text-color;
-  font-size: 16px;
-  img {
+  // border-bottom: 1px solid #eee;
+  font-size: 0;
+  &__icon {
+    display: inline-block;
     vertical-align: middle;
-    height: 32px;
+    height: 30px;
+    line-height: 30px;
     margin-right: 10px;
+    img {
+      height: 100%;
+    }
+  }
+  &__title {
+    vertical-align: middle;
+    line-height: 1.5;
+    font-size: 16px;
   }
 }
 </style>
