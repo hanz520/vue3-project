@@ -3,6 +3,11 @@ import { defineStore } from 'pinia'
 
 const mockData = [
   {
+    name: '工作台',
+    route: 'home',
+    icon: 'icon-appstore'
+  },
+  {
     name: '系统管理',
     route: 'system',
     icon: 'icon-appstore',
@@ -84,6 +89,8 @@ const mockData = [
 
 interface NavState {
   _navList: ItemFace[] | null
+  active: string[] // 因为antd-v的selectedKeys为 string[]
+  collapsed: boolean
 }
 
 /**
@@ -93,7 +100,9 @@ export const useNavStore = defineStore({
   id: 'nav',
   state(): NavState {
     return {
-      _navList: null
+      _navList: null,
+      active: ['banner'],
+      collapsed: false
     }
   },
   getters: {
@@ -102,6 +111,9 @@ export const useNavStore = defineStore({
   actions: {
     initNavList() {
       this._navList = mockData
+    },
+    setActive(data: string[]) {
+      this.active = data
     }
   }
 })

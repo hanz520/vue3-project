@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<!-- <script lang="ts" setup></script> -->
 
 <style lang="scss">
 .app-logo {
@@ -21,15 +21,24 @@
     vertical-align: middle;
     height: 30px;
     line-height: 30px;
-    margin-right: 10px;
     img {
       height: 100%;
     }
   }
   &__title {
+    margin-left: 10px;
     vertical-align: middle;
     line-height: 1.5;
     font-size: 16px;
+    color: #ffffffb6;
+    transition: 0.25s ease all;
+    white-space: nowrap;
+    .app-sidebar--collapsed & {
+      width: 0;
+      display: inline-block;
+      opacity: 0;
+      margin-left: 0;
+    }
   }
 }
 </style>
