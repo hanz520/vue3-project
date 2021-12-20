@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+// import { ref } from 'vue'
 import Sidebar from './sidebar/Sidebar.vue'
 </script>
 
@@ -22,7 +22,9 @@ import Sidebar from './sidebar/Sidebar.vue'
 .app-sidebar {
   width: 240px;
   height: 100vh;
-  background: #282c34;
+  background: #001529;
+  color: #fff;
+  transition: 0.25s ease-out width;
   // border-right: 1px solid #eee;
   box-shadow: 2px 0 5px #0000004f;
   @include scroll(y);
