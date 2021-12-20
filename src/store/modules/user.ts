@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import useStorage from '../../composition/hooks/useStorage'
+import useStorage from '@/composition/hooks/useStorage'
 
 /**
  * 类型定义

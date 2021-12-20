@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import { useNavStore } from '@/store/modules/nav'
 import { toRefs } from 'vue'
-import Logo from '../Logo.vue'
+import Logo from './Logo.vue'
 import Item from './Item.vue'
 const useNav = useNavStore()
 const { navList, active, collapsed } = toRefs(useNav)
