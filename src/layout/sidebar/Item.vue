@@ -1,5 +1,5 @@
 <template>
-  <a-menu-item v-if="!hasSub" :key="navItem.route">
+  <a-menu-item v-if="!hasSub" :key="navItem.route" @click="itemClick">
     <template v-if="navItem.icon" #icon>
       <SvgIcon class="nav-item-icon" :href="navItem.icon" />
     </template>
@@ -19,6 +19,7 @@ import { computed, toRefs } from 'vue'
 import type { ComputedRef } from 'vue'
 import type { ItemFace } from './type'
 import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
+import { useRouter } from 'vue-router'
 
 export interface PropsType {
   navItem: ItemFace
@@ -26,6 +27,9 @@ export interface PropsType {
 const props = defineProps<PropsType>()
 const { navItem } = toRefs(props)
 
+/**
+ * 判断当前路由是否有子路由
+ */
 const hasSub: ComputedRef<boolean> = computed(() => {
   const children = navItem.value.children
   if (children && Array.isArray(children) && children.length > 0) {
@@ -33,6 +37,16 @@ const hasSub: ComputedRef<boolean> = computed(() => {
   }
   return false
 })
+
+/**
+ * 进行路由跳转
+ */
+const router = useRouter()
+const itemClick = () => {
+  router.push({
+    name: navItem.value.route
+  })
+}
 </script>
 
 <style lang="scss">
