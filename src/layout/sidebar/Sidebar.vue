@@ -23,6 +23,9 @@ initNavList()
 
 <style lang="scss">
 .app-sidebar--collapsed {
-  width: 80px !important;
+  width: 50px;
+  .ant-menu.ant-menu-inline-collapsed {
+    width: 50px;
+  }
 }
 </style>
