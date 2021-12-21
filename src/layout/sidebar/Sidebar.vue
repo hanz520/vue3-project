@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ 'app-sidebar--collapsed': collapsed }">
+  <div class="app-sidebar" :class="{ 'app-sidebar--collapsed': collapsed }">
     <Logo />
     <a-menu v-if="navList" v-model:selectedKeys="active" mode="inline" :inline-collapsed="collapsed" theme="dark">
       <Item v-for="item in navList" :key="item.route" :nav-item="item" />
@@ -22,10 +22,20 @@ initNavList()
 </script>
 
 <style lang="scss">
-.app-sidebar--collapsed {
-  width: 50px;
-  .ant-menu.ant-menu-inline-collapsed {
+.app-sidebar {
+  width: 240px;
+  height: 100vh;
+  background: #001529;
+  color: #fff;
+  transition: 0.25s ease-out width;
+  // border-right: 1px solid #eee;
+  box-shadow: 2px 0 10px #0000005b;
+  @include scroll(y);
+  &--collapsed {
     width: 50px;
+    .ant-menu.ant-menu-inline-collapsed {
+      width: 50px;
+    }
   }
 }
 </style>

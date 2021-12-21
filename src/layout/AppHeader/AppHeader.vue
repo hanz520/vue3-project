@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-header">
     <CollapseBtn class="collapse-btn" />
     <div class="app-header__option">
       <span class="app-message">消息</span>
@@ -15,11 +15,19 @@ import CollapseBtn from '../sidebar/CollapseBtn.vue'
 </script>
 
 <style lang="scss">
-.collapse-btn {
-  margin: 13px 0 0 20px;
-}
-.app-header__option {
-  margin-right: 20px;
+.app-header {
+  width: 100%;
+  height: 50px;
+  padding: 0 10px;
+  box-shadow: 0 2px 10px #0000005b;
   display: flex;
+  justify-content: space-between;
+  .collapse-btn {
+    margin: 13px 0 0 20px;
+  }
+  &__option {
+    margin-right: 20px;
+    display: flex;
+  }
 }
 </style>
