@@ -18,7 +18,7 @@ const hrefFormatter = computed(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .svg-icon {
   overflow: hidden;
   width: 1em;

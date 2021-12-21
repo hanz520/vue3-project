@@ -2,7 +2,7 @@
   <div class="app-wrap">
     <Sidebar class="app-sidebar" />
     <div class="app-container">
-      <div class="app-header"></div>
+      <AppHeader class="app-header" />
       <div class="app-content"></div>
     </div>
   </div>
@@ -11,6 +11,7 @@
 <script lang="ts" setup>
 // import { ref } from 'vue'
 import Sidebar from './sidebar/Sidebar.vue'
+import AppHeader from './AppHeader/AppHeader.vue'
 </script>
 
 <style lang="scss">
@@ -26,7 +27,7 @@ import Sidebar from './sidebar/Sidebar.vue'
   color: #fff;
   transition: 0.25s ease-out width;
   // border-right: 1px solid #eee;
-  box-shadow: 2px 0 5px #0000004f;
+  box-shadow: 2px 0 10px #0000005b;
   @include scroll(y);
 }
 .app-container {
@@ -35,8 +36,10 @@ import Sidebar from './sidebar/Sidebar.vue'
 .app-header {
   width: 100%;
   height: 50px;
-  // background: lightgreen;
-  border-bottom: 1px solid #eee;
+  padding: 0 10px;
+  box-shadow: 0 2px 10px #0000005b;
+  display: flex;
+  justify-content: space-between;
 }
 .app-content {
   width: 100%;
