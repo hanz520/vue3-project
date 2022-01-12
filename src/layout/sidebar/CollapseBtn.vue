@@ -19,6 +19,13 @@ const toggle = () => {
 <style lang="scss">
 .collapse-btn {
   font-size: 24px;
+  transition: 0.2s color ease-out;
   cursor: pointer;
+  &:hover {
+    color: #1890ff;
+  }
+  &:active {
+    opacity: 0.6;
+  }
 }
 </style>
