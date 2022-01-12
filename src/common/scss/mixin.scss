@@ -1,7 +1,0 @@
-@mixin scroll($direction) {
-  @if $direction == all {
-    overflow: auto;
-  } @else {
-    overflow-#{$direction}: auto;
-  } 
-}
