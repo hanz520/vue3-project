@@ -10,11 +10,13 @@
     "lint": "eslint --fix --ext .js --ext .ts --ext .jsx --ext .vue src/"
   },
   "dependencies": {
+    "@types/nprogress": "^0.2.0",
     "@types/qs": "^6.9.7",
     "@vueuse/core": "^7.1.2",
     "ant-design-vue": "^2.2.8",
     "axios": "^0.24.0",
     "normalize.css": "^8.0.1",
+    "nprogress": "^0.2.0",
     "pinia": "^2.0.6",
     "qs": "^6.10.2",
     "screenfull": "^6.0.0",
