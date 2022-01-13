@@ -18,6 +18,7 @@ const toggle = () => {
 
 <style lang="scss">
 .collapse-btn {
+  margin: 13px 0 0 20px;
   font-size: 24px;
   transition: 0.2s color ease-out;
   cursor: pointer;
