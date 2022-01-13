@@ -5,17 +5,17 @@
       <Message />
       <FullScreen />
       <Reload />
-      <div class="app-user">用户</div>
+      <HeadUser />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import CollapseBtn from './CollapseBtn.vue'
 import Message from './Message.vue'
 import FullScreen from './FullScreen.vue'
 import Reload from './PageReload.vue'
+import HeadUser from './HeadUser.vue'
 </script>
 
 <style lang="scss">

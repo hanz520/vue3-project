@@ -31,7 +31,7 @@ export const useUserStore = defineStore({
   },
   actions: {
     // 设置用户信息
-    setUserInfo(info: UserInfo) {
+    setUserInfo(info: UserInfo | null) {
       this.userInfo = info
       const storage = useStorage()
       storage.setItem('userInfo', this.userInfo)
