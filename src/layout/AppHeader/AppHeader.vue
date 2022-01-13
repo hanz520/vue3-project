@@ -4,10 +4,7 @@
     <div class="app-header__option">
       <Message />
       <FullScreen />
-      <span class="app-page-reload">
-        <SvgIcon href="icon-sync" />
-      </span>
-
+      <Reload />
       <div class="app-user">用户</div>
     </div>
   </div>
@@ -16,9 +13,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import CollapseBtn from './CollapseBtn.vue'
-import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
 import Message from './Message.vue'
 import FullScreen from './FullScreen.vue'
+import Reload from './PageReload.vue'
 </script>
 
 <style lang="scss">
