@@ -3,7 +3,9 @@
     <Sidebar />
     <div class="app-container">
       <AppHeader />
-      <div class="app-content"></div>
+      <div class="app-content">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>

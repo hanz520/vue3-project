@@ -7,24 +7,31 @@ import 'nprogress/nprogress.css'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/home',
-    component: () => import('@/layout/Layout.vue')
+    redirect: '/workbench',
+    component: () => import('@/layout/Layout.vue'),
+    children: [
+      {
+        path: '/workbench',
+        name: 'workbench',
+        component: () => import('@/views/workbench/Workbench.vue')
+      },
+      {
+        path: '/workbench',
+        name: 'workbench',
+        component: () => import('@/views/workbench/Workbench.vue')
+      }
+    ]
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('@/views/login/Login.vue')
-  },
-  {
-    path: '/home',
-    name: 'home',
-    component: () => import('@/layout/Layout.vue')
   }
   // {
   //   path: '/home',
   //   name: 'home',
-  //   component: () => import('@/views/home/Home.vue')
-  // },
+  //   component: () => import('@/layout/Layout.vue')
+  // }
 ]
 
 const router = createRouter({
