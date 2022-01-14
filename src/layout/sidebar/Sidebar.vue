@@ -9,16 +9,21 @@
 
 <script lang="ts" setup>
 import { useNavStore } from '@/store/modules/nav'
-import { toRefs } from 'vue'
+import { toRefs, watch } from 'vue'
 import Logo from './Logo.vue'
 import Item from './Item.vue'
+import { useRoute } from 'vue-router'
 const useNav = useNavStore()
 const { navList, active, collapsed } = toRefs(useNav)
-const { initNavList } = useNav
+const { initNavList, setActive } = useNav
 /**
  * todo: 真正初始化不是在此处，后续优化
  */
 initNavList()
+
+// 根据路由变化选中高亮
+const route = useRoute()
+watch(route, () => setActive([route.name] as string[]), { immediate: true })
 </script>
 
 <style lang="scss">
