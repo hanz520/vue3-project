@@ -1,5 +1,5 @@
 <template>
-  <span class="app-page-reload">
+  <span class="app-page-reload" @click="refresh">
     <SvgIcon href="icon-sync" class="app-page-reload__icon" />
   </span>
 </template>
@@ -7,9 +7,19 @@
 <script lang="ts" setup>
 import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
 // todo: 根据路由进行刷新
-// import { useRouter } from 'vue-router'
-// const router = useRouter()
-// console.log(router)
+import { useRoute, useRouter } from 'vue-router'
+const router = useRouter()
+const route = useRoute()
+const refresh = () => {
+  router.replace({
+    name: 'redirect',
+    query: {
+      prename: route.name as string,
+      preparams: JSON.stringify(route.params),
+      prequery: JSON.stringify(route.query)
+    }
+  })
+}
 </script>
 
 <style lang="scss">
