@@ -7,7 +7,8 @@
     "serve": "vite preview",
     "preview": "vite preview --port 8866",
     "prepare": "husky install",
-    "lint": "eslint --fix --ext .js --ext .ts --ext .jsx --ext .vue src/"
+    "lint": "eslint --fix --ext .js --ext .ts --ext .jsx --ext .vue src/",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@types/nprogress": "^0.2.0",
@@ -36,6 +37,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.1.1",
     "husky": "^7.0.4",
+    "patch-package": "^6.4.7",
     "prettier": "^2.5.0",
     "sass": "^1.43.5",
     "typescript": "^4.4.3",

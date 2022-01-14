@@ -1,0 +1,16 @@
+diff --git a/node_modules/vue-router/dist/vue-router.d.ts b/node_modules/vue-router/dist/vue-router.d.ts
+index 692bc13..6fd318d 100644
+--- a/node_modules/vue-router/dist/vue-router.d.ts
++++ b/node_modules/vue-router/dist/vue-router.d.ts
+@@ -780,6 +780,11 @@ export declare interface _RouteRecordBase extends PathParserOptions {
+      * Arbitrary data attached to the record.
+      */
+     meta?: RouteMeta;
++
++    /**
++     * 用来判断路由是否在导航中显示 hide为true不显示
++     */
++    hide?: boolean
+ }
+ 
+ declare interface RouteRecordMatcher extends PathParser {
