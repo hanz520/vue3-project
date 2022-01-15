@@ -43,9 +43,13 @@ const hasSub: ComputedRef<boolean> = computed(() => {
  */
 const router = useRouter()
 const itemClick = () => {
-  router.push({
-    name: navItem.value.route
-  })
+  if (router.hasRoute(navItem.value.route)) {
+    router.push({
+      name: navItem.value.route
+    })
+  } else {
+    router.push('/404')
+  }
 }
 </script>
 
