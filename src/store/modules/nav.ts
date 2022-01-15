@@ -9,7 +9,7 @@ const mockData = [
   },
   {
     name: '系统管理',
-    route: 'system',
+    route: 'systemM',
     icon: 'icon-appstore',
     children: [
       {
@@ -26,6 +26,40 @@ const mockData = [
         name: '权限管理',
         route: 'auth',
         icon: 'icon-appstore'
+      }
+    ]
+  },
+  {
+    name: '产品管理',
+    route: 'productM',
+    icon: 'icon-appstore',
+    children: [
+      {
+        name: '分类管理',
+        route: 'classify',
+        icon: 'icon-appstore'
+      },
+      {
+        name: '产品',
+        route: 'product',
+        icon: 'icon-appstore'
+      },
+      {
+        name: '产品集合',
+        route: 'productSet',
+        icon: 'icon-appstore',
+        children: [
+          {
+            name: '集合A',
+            route: 'productSetA',
+            icon: 'icon-appstore'
+          },
+          {
+            name: '集合B',
+            route: 'productSetB',
+            icon: 'icon-appstore'
+          }
+        ]
       }
     ]
   }

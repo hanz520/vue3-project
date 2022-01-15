@@ -52,6 +52,7 @@ import { useRouter } from 'vue-router'
 import useFlag from '@/composition/hooks/useFlag'
 import useCount from '@/composition/hooks/useCount'
 import { useUserStore } from '@/store'
+import { userInfoMockData } from '@/store/modules/user'
 const router = useRouter()
 
 /**
@@ -124,13 +125,8 @@ const submit = async () => {
       return false
     }
     const userStore = useUserStore()
-    const userInfo = {
-      username: 'admin',
-      role: 'admin',
-      id: '0000001',
-      token: 'e6295f22b0644e06b186462d88bbf490'
-    }
-    userStore.setUserInfo(userInfo)
+
+    userStore.setUserInfo(userInfoMockData)
     router.push({
       path: '/'
     })
