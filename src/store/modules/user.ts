@@ -230,7 +230,16 @@ const getAuthAsyncRoutes: (asyncRoutes: RouteRecordRaw[], authList: Auth[]) => R
   asyncRoutes,
   authList
 ) => {
-  return asyncRoutes
+  return asyncRoutes.filter((route) => {
+    if (authList.findIndex((auth) => auth.name === route.name) > -1) {
+      if (route.children) {
+        route.children = getAuthAsyncRoutes(route.children, authList)
+      }
+      return true
+    } else {
+      return false
+    }
+  })
 }
 
 /**
@@ -269,6 +278,7 @@ export const useUserStore = defineStore({
     // 根据路由权限过滤并追加动态路由
     appendAsyncRoute() {
       const authAsyncRoutes = getAuthAsyncRoutes(asyncRoutes, this.authList)
+      console.log(authAsyncRoutes)
       authAsyncRoutes.map((asyncRoute) => {
         router.addRoute('init', asyncRoute)
       })
