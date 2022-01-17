@@ -81,7 +81,7 @@ router.beforeEach((to, from, next) => {
     // }
     const fullPath = combinedRoute.value ? '/404' : to.fullPath
     combinedRouteHandler.set(true)
-    next(fullPath)
+    router.replace(fullPath)
   }
   next()
 })

@@ -1,7 +1,14 @@
 <template>
   <div class="app-sidebar" :class="{ 'app-sidebar--collapsed': collapsed }">
     <Logo />
-    <a-menu v-if="routeList" v-model:selectedKeys="active" mode="inline" :inline-collapsed="collapsed" theme="dark">
+    <a-menu
+      v-if="routeList"
+      v-model:selectedKeys="active"
+      v-model:openKeys="openKeys"
+      mode="inline"
+      :inline-collapsed="collapsed"
+      theme="dark"
+    >
       <Item v-for="item in routeList" :key="item.name" :nav-item="item" />
     </a-menu>
   </div>
@@ -14,12 +21,25 @@ import Logo from './Logo.vue'
 import Item from './Item.vue'
 import { useRoute } from 'vue-router'
 const useNav = useNavStore()
-const { routeList, active, collapsed } = toRefs(useNav)
+const { routeList, active, collapsed, openKeys } = toRefs(useNav)
 const { setActive } = useNav
 
 // 根据路由变化选中高亮
 const route = useRoute()
-watch(route, () => setActive([route.name] as string[]), { immediate: true })
+watch(
+  route,
+  () => {
+    setActive([route.name] as string[])
+    // 设置打开的item
+    route.matched.map((item) => {
+      const name = item.name as string
+      if (openKeys.value.indexOf(name) === -1) {
+        openKeys.value.push(name)
+      }
+    })
+  },
+  { immediate: true }
+)
 </script>
 
 <style lang="scss">
