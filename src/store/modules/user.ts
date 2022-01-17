@@ -286,7 +286,6 @@ export const useUserStore = defineStore({
       const navStore = useNavStore()
       let routes = cloneDeep(router.options.routes[0].children) || []
       routes = routes.concat(authAsyncRoutes)
-      console.log(routes)
       navStore.initNavList(routes)
     },
     // 移出动态路由
