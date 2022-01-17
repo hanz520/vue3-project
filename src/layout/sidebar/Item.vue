@@ -49,6 +49,7 @@ const itemClick = () => {
     })
   } else {
     router.push('/404')
+    console.error('sidebar组件找不到路由' + navItem.value)
   }
 }
 </script>

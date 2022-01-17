@@ -63,26 +63,23 @@ const router = createRouter({
 
 export const asyncRoutes: RouteRecordRaw[] = [system, product]
 
-let flag = 0
+const [combinedRoute, combinedRouteHandler] = useFlag(false)
 router.beforeEach((to, from, next) => {
-  console.log(to)
-  console.log(to.meta)
-  console.log(to.query)
+  // console.log(to)
+  // console.log(to.meta)
+  // console.log(to.query)
   NProgress.start()
   const { logged } = useUserStore()
   // 如果是前往登录页，或者没找到登录信息，跳转登录页
   if (to.name !== 'login' && !logged) {
     next({ name: 'login' })
-  } else {
-    if (flag === 0 && to.matched.length == 0) {
-      flag++
-      router.push(to.fullPath)
-    } else if (flag !== 0 && to.matched.length == 0) {
-      router.push('/404')
-    } else {
-      next()
-    }
   }
+  if (to.matched.length == 0) {
+    const path = combinedRoute.value ? '/404' : to.fullPath
+    combinedRouteHandler.set(true)
+    router.push(path)
+  }
+  next()
 })
 router.afterEach(() => {
   NProgress.done()

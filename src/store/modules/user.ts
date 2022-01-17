@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import useStorage from '@/composition/hooks/useStorage'
-import { useRouter } from 'vue-router'
-import { asyncRoutes } from '@/router'
+import router, { asyncRoutes } from '@/router'
+import { RouteRecordRaw } from 'vue-router'
 
 export const userInfoMockData = {
   username: 'admin',
@@ -209,7 +209,6 @@ interface UserInfo {
 interface UserState {
   userInfo: UserInfo | null
   authList: Auth[]
-  combinedRoute: boolean // 是否已经合并了路由
 }
 
 /**
@@ -226,6 +225,13 @@ const treeToArray: (data: Auth[], pname: string | null) => Array<Auth> = (data, 
     return result
   }, [])
 }
+// 获取授予权限的路由
+const getAuthAsyncRoutes: (asyncRoutes: RouteRecordRaw[], authList: Auth[]) => RouteRecordRaw[] = (
+  asyncRoutes,
+  authList
+) => {
+  return asyncRoutes
+}
 
 /**
  * 具体实现
@@ -235,8 +241,7 @@ export const useUserStore = defineStore({
   state(): UserState {
     return {
       userInfo: null,
-      authList: [],
-      combinedRoute: false
+      authList: []
     }
   },
   getters: {
@@ -250,24 +255,29 @@ export const useUserStore = defineStore({
     // 设置用户信息
     setUserInfo(info: UserInfo | null) {
       const storage = useStorage()
-
       if (info != null) {
         this.authList = treeToArray(info.auth, null)
         this.userInfo = info
+        this.appendAsyncRoute()
       } else {
+        this.removeAsyncRoute()
         this.authList = []
         this.userInfo = null
       }
-
-      this.appenAsyncRoute()
-
       storage.setItem('userInfo', this.userInfo)
     },
     // 根据路由权限过滤并追加动态路由
-    appenAsyncRoute() {
-      const router = useRouter()
-      asyncRoutes.map((asyncRoute) => {
+    appendAsyncRoute() {
+      const authAsyncRoutes = getAuthAsyncRoutes(asyncRoutes, this.authList)
+      authAsyncRoutes.map((asyncRoute) => {
         router.addRoute('init', asyncRoute)
+      })
+    },
+    // 移出动态路由
+    removeAsyncRoute() {
+      this.authRoute.forEach((route) => {
+        console.log(router.hasRoute(route.name), route.name)
+        if (router.hasRoute(route.name)) router.removeRoute(route.name)
       })
     }
   }
