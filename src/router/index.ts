@@ -10,6 +10,22 @@ import useFlag from '@/composition/hooks/useFlag'
 
 const routes: RouteRecordRaw[] = [
   {
+    path: '/',
+    name: 'init',
+    redirect: '/workbench',
+    meta: { title: '主页' },
+    component: () => import('@/layout/Layout.vue'),
+    hide: true,
+    children: [
+      {
+        path: '/workbench',
+        name: 'workbench',
+        component: () => import('@/views/workbench/Workbench.vue'),
+        meta: { title: '工作台', icon: 'icon-appstore' }
+      }
+    ]
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('@/views/login/Login.vue'),
@@ -29,24 +45,8 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/notFound/NotFound.vue'),
     meta: { title: '404' },
     hide: true
-  },
-  {
-    path: '/',
-    name: 'init',
-    redirect: '/workbench',
-    meta: { title: '主页' },
-    component: () => import('@/layout/Layout.vue'),
-    hide: false,
-    children: [
-      {
-        path: '/workbench',
-        name: 'workbench',
-        component: () => import('@/views/workbench/Workbench.vue'),
-        meta: { title: '工作台' },
-        hide: false
-      }
-    ]
   }
+
   // {
   //   path: '/:pathMatch(.*)*',
   //   name: 'notFound',

@@ -1,28 +1,29 @@
 <template>
-  <a-menu-item v-if="!hasSub" :key="navItem.route" @click="itemClick">
-    <template v-if="navItem.icon" #icon>
-      <SvgIcon class="nav-item-icon" :href="navItem.icon" />
-    </template>
-    <span>{{ navItem.name }}</span>
-  </a-menu-item>
-  <a-sub-menu v-if="hasSub" :key="navItem.route">
-    <template v-if="navItem.icon" #icon>
-      <SvgIcon class="nav-item-icon" :href="navItem.icon" />
-    </template>
-    <template #title>{{ navItem.name }}</template>
-    <Item v-for="item in navItem.children" :key="item.route" :nav-item="item" />
-  </a-sub-menu>
+  <template v-if="!navItem.hide">
+    <a-menu-item v-if="!hasSub" :key="navItem.name" @click="itemClick">
+      <template v-if="icon" #icon>
+        <SvgIcon class="nav-item-icon" :href="icon" />
+      </template>
+      <span>{{ navItem.meta?.title }}</span>
+    </a-menu-item>
+    <a-sub-menu v-if="hasSub" :key="navItem.name">
+      <template v-if="icon" #icon>
+        <SvgIcon class="nav-item-icon" :href="icon" />
+      </template>
+      <template #title>{{ navItem.meta?.title }}</template>
+      <Item v-for="item in navItem.children" :key="item.name" :nav-item="item" />
+    </a-sub-menu>
+  </template>
 </template>
 
 <script lang="ts" setup>
 import { computed, toRefs } from 'vue'
 import type { ComputedRef } from 'vue'
-import type { ItemFace } from './type'
 import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
-import { useRouter } from 'vue-router'
+import { RouteRecordRaw, useRouter } from 'vue-router'
 
 export interface PropsType {
-  navItem: ItemFace
+  navItem: RouteRecordRaw
 }
 const props = defineProps<PropsType>()
 const { navItem } = toRefs(props)
@@ -38,14 +39,22 @@ const hasSub: ComputedRef<boolean> = computed(() => {
   return false
 })
 
+const icon: ComputedRef<string | undefined> = computed(() => {
+  if (navItem.value.meta?.icon) {
+    return navItem.value.meta?.icon as string
+  } else {
+    return undefined
+  }
+})
+
 /**
  * 进行路由跳转
  */
 const router = useRouter()
 const itemClick = () => {
-  if (router.hasRoute(navItem.value.route)) {
+  if (navItem.value.name && router.hasRoute(navItem.value.name)) {
     router.push({
-      name: navItem.value.route
+      name: navItem.value.name
     })
   } else {
     router.push('/404')

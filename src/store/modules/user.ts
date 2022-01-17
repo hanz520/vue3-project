@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import useStorage from '@/composition/hooks/useStorage'
 import router, { asyncRoutes } from '@/router'
 import { RouteRecordRaw } from 'vue-router'
+import { useNavStore } from './nav'
+import { cloneDeep } from 'lodash'
 
 export const userInfoMockData = {
   username: 'admin',
@@ -87,50 +89,50 @@ export const userInfoMockData = {
       label: '产品管理',
       type: 'route',
       children: [
-        {
-          name: 'classify',
-          label: '分类管理',
-          type: 'route',
-          children: [
-            {
-              name: 'classifyAdd',
-              label: '分类新增',
-              type: 'button'
-            },
-            {
-              name: 'classifyEdit',
-              label: '分类编辑',
-              type: 'button'
-            },
-            {
-              name: 'classifyDel',
-              label: '分类删除',
-              type: 'button'
-            }
-          ]
-        },
-        {
-          name: 'product',
-          label: '产品',
-          type: 'route',
-          children: [
-            {
-              name: 'productAdd',
-              label: '产品新增',
-              type: 'button'
-            },
-            {
-              name: 'productEdit',
-              label: '产品编辑',
-              type: 'button'
-            },
-            {
-              name: 'productDel',
-              label: '产品删除',
-              type: 'button'
-            }
-          ]
-        },
+        // {
+        //   name: 'classify',
+        //   label: '分类管理',
+        //   type: 'route',
+        //   children: [
+        //     {
+        //       name: 'classifyAdd',
+        //       label: '分类新增',
+        //       type: 'button'
+        //     },
+        //     {
+        //       name: 'classifyEdit',
+        //       label: '分类编辑',
+        //       type: 'button'
+        //     },
+        //     {
+        //       name: 'classifyDel',
+        //       label: '分类删除',
+        //       type: 'button'
+        //     }
+        //   ]
+        // },
+        // {
+        //   name: 'product',
+        //   label: '产品',
+        //   type: 'route',
+        //   children: [
+        //     {
+        //       name: 'productAdd',
+        //       label: '产品新增',
+        //       type: 'button'
+        //     },
+        //     {
+        //       name: 'productEdit',
+        //       label: '产品编辑',
+        //       type: 'button'
+        //     },
+        //     {
+        //       name: 'productDel',
+        //       label: '产品删除',
+        //       type: 'button'
+        //     }
+        //   ]
+        // },
         {
           name: 'productSet',
           label: '产品集',
@@ -278,17 +280,23 @@ export const useUserStore = defineStore({
     // 根据路由权限过滤并追加动态路由
     appendAsyncRoute() {
       const authAsyncRoutes = getAuthAsyncRoutes(asyncRoutes, this.authList)
-      console.log(authAsyncRoutes)
       authAsyncRoutes.map((asyncRoute) => {
         router.addRoute('init', asyncRoute)
       })
+      const navStore = useNavStore()
+      let routes = cloneDeep(router.options.routes[0].children) || []
+      routes = routes.concat(authAsyncRoutes)
+      console.log(routes)
+      navStore.initNavList(routes)
     },
     // 移出动态路由
     removeAsyncRoute() {
       this.authRoute.forEach((route) => {
-        console.log(router.hasRoute(route.name), route.name)
         if (router.hasRoute(route.name)) router.removeRoute(route.name)
       })
+      const navStore = useNavStore()
+      const routes = cloneDeep(router.options.routes[0].children) || []
+      navStore.initNavList(routes)
     }
   }
 })

@@ -1,8 +1,8 @@
 <template>
   <div class="app-sidebar" :class="{ 'app-sidebar--collapsed': collapsed }">
     <Logo />
-    <a-menu v-if="navList" v-model:selectedKeys="active" mode="inline" :inline-collapsed="collapsed" theme="dark">
-      <Item v-for="item in navList" :key="item.route" :nav-item="item" />
+    <a-menu v-if="routeList" v-model:selectedKeys="active" mode="inline" :inline-collapsed="collapsed" theme="dark">
+      <Item v-for="item in routeList" :key="item.name" :nav-item="item" />
     </a-menu>
   </div>
 </template>
@@ -14,12 +14,8 @@ import Logo from './Logo.vue'
 import Item from './Item.vue'
 import { useRoute } from 'vue-router'
 const useNav = useNavStore()
-const { navList, active, collapsed } = toRefs(useNav)
-const { initNavList, setActive } = useNav
-/**
- * todo: 真正初始化不是在此处，后续优化
- */
-initNavList()
+const { routeList, active, collapsed } = toRefs(useNav)
+const { setActive } = useNav
 
 // 根据路由变化选中高亮
 const route = useRoute()
