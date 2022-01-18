@@ -76,14 +76,14 @@
     >
       <div class="app-tags__contextmenuitem" @click="refreshFn(currentView!)">刷新</div>
       <div class="app-tags__contextmenuitem" @click="closeFn(currentView!)">关闭</div>
-      <div class="app-tags__contextmenuitem" @click="closeOthersFn(currentView!)">关闭其他</div>
-      <div class="app-tags__contextmenuitem" @click="closeAllFn(currentView!)">关闭所有</div>
+      <div class="app-tags__contextmenuitem" @click="closeOtherFn(currentView!)">关闭其他</div>
+      <div class="app-tags__contextmenuitem" @click="closeAllFn()">关闭所有</div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, Ref, ref, watch } from 'vue'
+import { reactive, Ref, ref, toRefs, watch } from 'vue'
 import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import { useTagsViewStore } from '@/store/index'
@@ -91,7 +91,9 @@ import useFlag from '@/composition/hooks/useFlag'
 
 const route = useRoute()
 const router = useRouter()
-const { visitedViews, addView, delView, cachedViews, refreshView } = useTagsViewStore()
+const tagsViewStore = useTagsViewStore()
+const { visitedViews, cachedViews } = toRefs(tagsViewStore)
+const { addView, delView, refreshView, delOtherView, delAllView } = tagsViewStore
 
 /**
  * 状态控制相关
@@ -100,7 +102,7 @@ const isActive = (view: RouteLocationNormalizedLoaded) => {
   return view.path === route.path
 }
 const isHideClose = (view: RouteLocationNormalizedLoaded) => {
-  return cachedViews.length === 1 && view.name === 'Workbench'
+  return cachedViews.value.length === 1 && view.name === 'Workbench'
 }
 
 /**
@@ -131,11 +133,19 @@ const closeFn = (view: RouteLocationNormalizedLoaded) => {
   })
 }
 
-// 删除其他
-const closeOthersFn = (view: RouteLocationNormalizedLoaded) => {}
+// 关闭其他
+const closeOtherFn = (view: RouteLocationNormalizedLoaded) => {
+  delOtherView(view).then(() => {
+    router.push(view)
+  })
+}
 
-// 删除全部
-const closeAllFn = (view: RouteLocationNormalizedLoaded) => {}
+// 关闭全部
+const closeAllFn = () => {
+  delAllView().then(() => {
+    router.push({ name: 'Workbench' })
+  })
+}
 
 /**
  * 右键菜单功能
