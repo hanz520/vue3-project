@@ -1,6 +1,21 @@
 <template>
   <div ref="appTags" class="app-tags">
-    <div class="app-tags__content">
+    <div ref="content" class="app-tags__content" @wheel.prevent="scrollFn">
+      <div
+        v-for="view in visitedViews"
+        :key="view.fullPath"
+        ref="tag"
+        :class="{ 'app-tags__item--active': isActive(view) }"
+        class="app-tags__item"
+        @click="routerToFn(view)"
+        @contextmenu.prevent="openMenu(view, $event)"
+      >
+        <span v-if="view.meta.icon" class="app-tags__icon"><SvgIcon :href="`${view.meta.icon as string}`" /></span>
+        {{ view.meta.title }}
+        <span v-if="!isHideClose(view)" class="app-tags__close" @click.stop.prevent="closeFn(view)"
+          ><SvgIcon href="icon-close"
+        /></span>
+      </div>
       <!-- <div class="app-tags__item">充数的标签</div>
       <div class="app-tags__item">充数的标签</div>
       <div class="app-tags__item">充数的标签</div>
@@ -53,20 +68,6 @@
       <div class="app-tags__item">充数的标签</div>
       <div class="app-tags__item">充数的标签</div>
       <div class="app-tags__item">充数的标签</div> -->
-      <div
-        v-for="view in visitedViews"
-        :key="view.fullPath"
-        :class="{ 'app-tags__item--active': isActive(view) }"
-        class="app-tags__item"
-        @click="routerToFn(view)"
-        @contextmenu.prevent="openMenu(view, $event)"
-      >
-        <span v-if="view.meta.icon" class="app-tags__icon"><SvgIcon :href="`${view.meta.icon as string}`" /></span>
-        {{ view.meta.title }}
-        <span v-if="!isHideClose(view)" class="app-tags__close" @click.stop.prevent="closeFn(view)"
-          ><SvgIcon href="icon-close"
-        /></span>
-      </div>
     </div>
 
     <div
@@ -83,7 +84,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, Ref, ref, toRefs, watch } from 'vue'
+import { getCurrentInstance, nextTick, reactive, Ref, ref, toRefs, watch } from 'vue'
 import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import { useTagsViewStore } from '@/store/index'
@@ -112,15 +113,29 @@ const isHideClose = (view: RouteLocationNormalizedLoaded) => {
 const routerToFn = (view: RouteLocationNormalizedLoaded) => {
   router.push(view.fullPath)
 }
-
+// 移动到当前路由位置
+const tag: Ref<HTMLDivElement | null> = ref(null)
+const moveToCurrentTag = (view: RouteLocationNormalizedLoaded) => {
+  const Instance = getCurrentInstance()
+  console.log(Instance)
+  // nextTick(() => {
+  //   console.log('移动滚动条')
+  //   console.log(tag.value)
+  // })
+}
 // 添加
-watch(route, (val) => addView(val), { immediate: true })
-
+watch(
+  route,
+  (val) => {
+    addView(val)
+    moveToCurrentTag(val)
+  },
+  { immediate: true }
+)
 // 刷新
 const refreshFn = (view: RouteLocationNormalizedLoaded) => {
   refreshView(view)
 }
-
 // 删除单个
 const closeFn = (view: RouteLocationNormalizedLoaded) => {
   delView(view).then(({ visitedViews }) => {
@@ -132,14 +147,12 @@ const closeFn = (view: RouteLocationNormalizedLoaded) => {
     }
   })
 }
-
 // 关闭其他
 const closeOtherFn = (view: RouteLocationNormalizedLoaded) => {
   delOtherView(view).then(() => {
     router.push(view)
   })
 }
-
 // 关闭全部
 const closeAllFn = () => {
   delAllView().then(() => {
@@ -174,8 +187,24 @@ const openMenu = (view: RouteLocationNormalizedLoaded, event: MouseEvent) => {
   }
 }
 const closeMenu = () => {
-  menuHandler.set(false)
-  document.body.removeEventListener('click', closeMenu)
+  if (menuVisible.value) {
+    menuHandler.set(false)
+    document.body.removeEventListener('click', closeMenu)
+  }
+}
+
+/**
+ * 导航滚动功能
+ */
+const content: Ref<HTMLDivElement | null> = ref(null)
+const scrollFn = (event: WheelEvent) => {
+  if (content.value && content.value.scrollWidth > content.value.getBoundingClientRect().width) {
+    console.log('执行')
+    // const eventDelta = event.wheelDelta || -event.deltaY * 40
+    const eventDelta = event.deltaY
+    content.value.scrollLeft = content.value.scrollLeft + eventDelta / 4
+    closeMenu()
+  }
 }
 </script>
 
