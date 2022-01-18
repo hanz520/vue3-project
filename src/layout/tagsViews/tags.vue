@@ -1,26 +1,93 @@
 <template>
-  <div class="app-tags">
+  <div ref="appTags" class="app-tags">
+    <div class="app-tags__content">
+      <!-- <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div>
+      <div class="app-tags__item">充数的标签</div> -->
+      <div
+        v-for="view in visitedViews"
+        :key="view.fullPath"
+        :class="{ 'app-tags__item--active': isActive(view) }"
+        class="app-tags__item"
+        @click="routerTo(view)"
+        @contextmenu.prevent="openMenu(view, $event)"
+      >
+        <span v-if="view.meta.icon" class="app-tags__icon"><SvgIcon :href="`${view.meta.icon as string}`" /></span>
+        {{ view.meta.title }}
+        <span v-if="!isHideClose(view)" class="app-tags__close" @click="delView(view)"
+          ><SvgIcon href="icon-close"
+        /></span>
+      </div>
+    </div>
+
     <div
-      v-for="view in visitedViews"
-      :key="view.fullPath"
-      :class="{ 'app-tags__item--active': isActive(view) }"
-      class="app-tags__item"
-      @click="routerTo(view)"
+      v-if="menuVisible"
+      class="app-tags__contextmenu"
+      :style="{ left: menuPosition.left + 'px', top: menuPosition.top + 'px' }"
     >
-      <span v-if="view.meta.icon" class="app-tags__icon"><SvgIcon :href="`${view.meta.icon as string}`" /></span>
-      {{ view.meta.title }}
-      <span v-if="!isHideClose(view)" class="app-tags__close" @click="delView(view)"
-        ><SvgIcon href="icon-close"
-      /></span>
+      <div class="app-tags__contextmenuitem">刷新</div>
+      <div class="app-tags__contextmenuitem">关闭</div>
+      <div class="app-tags__contextmenuitem">关闭其他</div>
+      <div class="app-tags__contextmenuitem">关闭所有</div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { reactive, Ref, ref, watch } from 'vue'
 import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import { useTagsViewStore } from '@/store/index'
+import useFlag from '@/composition/hooks/useFlag'
 
 const route = useRoute()
 const router = useRouter()
@@ -55,18 +122,57 @@ watch(visitedViews, () => {
 const routerTo = (view: RouteLocationNormalizedLoaded) => {
   router.push(view.fullPath)
 }
+
+/**
+ * 右键菜单功能
+ */
+const appTags: Ref<HTMLDivElement | null> = ref(null)
+const menuPosition = reactive({
+  top: 0,
+  left: 0
+})
+const [menuVisible, menuHandler] = useFlag(false)
+const openMenu = (view: RouteLocationNormalizedLoaded, event: MouseEvent) => {
+  if (appTags.value) {
+    const menuMinWidth = 105
+    const offsetLeft = appTags.value?.getBoundingClientRect().left
+    const offsetWidth = appTags.value?.offsetWidth
+    const maxLeft = offsetWidth - menuMinWidth
+    const left = event.clientX - offsetLeft + 10
+
+    menuPosition.left = left > maxLeft ? maxLeft : left
+    menuPosition.top = event.clientY - 50
+
+    menuHandler.set(true)
+    document.body.addEventListener('click', closeMenu)
+  }
+}
+const closeMenu = () => {
+  menuHandler.set(false)
+  document.body.removeEventListener('click', closeMenu)
+}
 </script>
 
 <style lang="scss">
 .app-tags {
   width: 100%;
   height: 35px;
-  box-shadow: 0 2px 3px #0000002f;
-  padding: 0 20px;
-  overflow-x: auto;
-  overflow-y: hidden;
+  box-shadow: 0 2px 5px #0000002f;
   display: flex;
   justify-content: flex-start;
+  position: relative;
+  &__content {
+    display: flex;
+    justify-content: flex-start;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    width: 100%;
+    height: 35px;
+    padding: 0 20px;
+    &:hover {
+      overflow-x: auto;
+    }
+  }
   &__item {
     padding: 0 10px;
     height: 30px;
@@ -119,6 +225,28 @@ const routerTo = (view: RouteLocationNormalizedLoaded) => {
     .svg-icon {
       font-size: 14px;
     }
+  }
+  &__contextmenu {
+    position: absolute;
+    left: 50px;
+    top: 10px;
+    background: #fff;
+    border: 1px solid #eee;
+    z-index: 1000;
+    box-shadow: 4px 4px 5px #00000049;
+    border-radius: 2px;
+  }
+  &__contextmenuitem {
+    padding: 6px 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  &__contextmenuitem:last-child {
+    border: none;
+  }
+  &__contextmenuitem:hover {
+    background: #eee;
   }
 }
 </style>
