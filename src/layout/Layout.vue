@@ -3,9 +3,7 @@
     <Sidebar />
     <div class="app-container">
       <AppHeader />
-      <div class="app-content">
-        <router-view />
-      </div>
+      <TagsViews />
     </div>
   </div>
 </template>
@@ -13,6 +11,7 @@
 <script lang="ts" setup>
 import Sidebar from './sidebar/Sidebar.vue'
 import AppHeader from './AppHeader/AppHeader.vue'
+import TagsViews from './tagsViews/tagsViews.vue'
 </script>
 
 <style lang="scss">
@@ -23,10 +22,6 @@ import AppHeader from './AppHeader/AppHeader.vue'
 }
 .app-container {
   flex: 1;
-}
-.app-content {
-  width: 100%;
-  height: calc(100vh - 50px);
-  // background: lightblue;
+  overflow: hidden;
 }
 </style>

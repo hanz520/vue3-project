@@ -23,7 +23,8 @@ import HeadUser from './HeadUser.vue'
   width: 100%;
   height: 50px;
   padding: 0 10px;
-  box-shadow: 0 2px 10px #0000005b;
+  // box-shadow: 0 2px 3px #0000005b;
+  border-bottom: 1px solid #eee;
   display: flex;
   justify-content: space-between;
   @include e(option) {
