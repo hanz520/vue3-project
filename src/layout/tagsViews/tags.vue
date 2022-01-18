@@ -193,7 +193,7 @@ const closeMenu = () => {
     padding: 0 10px;
     height: 30px;
     flex-shrink: 0;
-    border: 1px solid #eee;
+    border: 1px solid #dddddd;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     line-height: 30px;
@@ -247,14 +247,14 @@ const closeMenu = () => {
     left: 50px;
     top: 10px;
     background: #fff;
-    border: 1px solid #eee;
+    border: 1px solid #dddddd;
     z-index: 1000;
     box-shadow: 4px 4px 5px #00000049;
     border-radius: 2px;
   }
   &__contextmenuitem {
     padding: 6px 15px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #dddddd;
     cursor: pointer;
     font-size: 12px;
   }

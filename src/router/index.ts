@@ -35,7 +35,7 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     name: 'login',
     component: () => import('@/views/login/Login.vue'),
-    meta: { title: '登录' },
+    meta: { title: '登录', noCache: true },
     hide: true
   },
   // 用于刷新重定向

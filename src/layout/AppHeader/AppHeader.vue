@@ -24,7 +24,7 @@ import HeadUser from './HeadUser.vue'
   height: 50px;
   padding: 0 10px;
   // box-shadow: 0 2px 3px #0000005b;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #dddddd;
   display: flex;
   justify-content: space-between;
   @include e(option) {
