@@ -8,6 +8,7 @@ import useArrayTree from '@/composition/hooks/useArrayTree'
 
 export const userInfoMockData: UserInfo = {
   username: 'admin',
+  nickname: '年少不知愁滋味',
   role: 'admin',
   id: '0000001',
   token: 'e6295f22b0644e06b186462d88bbf490',
@@ -208,6 +209,7 @@ interface UserInfo {
   id: string
   token: string
   auth: Auth[]
+  [k: string]: any
 }
 interface UserState {
   userInfo: UserInfo | null
@@ -245,6 +247,7 @@ export const useUserStore = defineStore({
   },
   getters: {
     username: (state: UserState) => state.userInfo?.username,
+    nickname: (state: UserState) => state.userInfo?.nickname,
     logged: ({ userInfo }: UserState) => userInfo !== null,
     token: ({ userInfo }: UserState) => userInfo?.token,
     authRoute: ({ authList }: UserState) => authList.filter((item) => item.type === 'route'), // 权限-->路由

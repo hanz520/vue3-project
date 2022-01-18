@@ -11,7 +11,7 @@
       <div class="app-head-user__avatar">
         <img src="@/assets/avatar.jpg" />
       </div>
-      <div class="app-head-user__name">年少不识愁滋味</div>
+      <div class="app-head-user__name">{{ nickname }}</div>
       <div class="app-head-user__icon"><SvgIcon href="icon-down" /></div>
     </div>
   </a-popover>
@@ -20,6 +20,7 @@
 <script lang="ts" setup>
 import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
 import { useUserStore } from '@/store'
+import { toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
@@ -28,6 +29,9 @@ const logout = () => {
   userStore.setUserInfo(null)
   router.push({ name: 'login' })
 }
+
+const userStore = useUserStore()
+const { nickname } = toRefs(userStore)
 </script>
 
 <style lang="scss">
