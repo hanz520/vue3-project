@@ -58,12 +58,12 @@
         :key="view.fullPath"
         :class="{ 'app-tags__item--active': isActive(view) }"
         class="app-tags__item"
-        @click="routerTo(view)"
+        @click="routerToFn(view)"
         @contextmenu.prevent="openMenu(view, $event)"
       >
         <span v-if="view.meta.icon" class="app-tags__icon"><SvgIcon :href="`${view.meta.icon as string}`" /></span>
         {{ view.meta.title }}
-        <span v-if="!isHideClose(view)" class="app-tags__close" @click="delView(view)"
+        <span v-if="!isHideClose(view)" class="app-tags__close" @click.stop.prevent="closeFn(view)"
           ><SvgIcon href="icon-close"
         /></span>
       </div>
@@ -74,10 +74,10 @@
       class="app-tags__contextmenu"
       :style="{ left: menuPosition.left + 'px', top: menuPosition.top + 'px' }"
     >
-      <div class="app-tags__contextmenuitem">刷新</div>
-      <div class="app-tags__contextmenuitem">关闭</div>
-      <div class="app-tags__contextmenuitem">关闭其他</div>
-      <div class="app-tags__contextmenuitem">关闭所有</div>
+      <div class="app-tags__contextmenuitem" @click="refreshFn(currentView!)">刷新</div>
+      <div class="app-tags__contextmenuitem" @click="closeFn(currentView!)">关闭</div>
+      <div class="app-tags__contextmenuitem" @click="closeOthersFn(currentView!)">关闭其他</div>
+      <div class="app-tags__contextmenuitem" @click="closeAllFn(currentView!)">关闭所有</div>
     </div>
   </div>
 </template>
@@ -91,37 +91,51 @@ import useFlag from '@/composition/hooks/useFlag'
 
 const route = useRoute()
 const router = useRouter()
-const { visitedViews, addView, delView, cachedViews } = useTagsViewStore()
+const { visitedViews, addView, delView, cachedViews, refreshView } = useTagsViewStore()
 
-// 当前显示路由
+/**
+ * 状态控制相关
+ */
 const isActive = (view: RouteLocationNormalizedLoaded) => {
   return view.path === route.path
 }
-
-//
 const isHideClose = (view: RouteLocationNormalizedLoaded) => {
   return cachedViews.length === 1 && view.name === 'Workbench'
 }
 
-// 添加缓存
-watch(
-  route,
-  (val) => {
-    addView(val)
-  },
-  { immediate: true }
-)
-
-// 默认显示Workbench
-watch(visitedViews, () => {
-  if (visitedViews.length == 0) {
-    router.push({ name: 'Workbench' })
-  }
-})
+/**
+ * 路由操作功能
+ */
 // 跳转
-const routerTo = (view: RouteLocationNormalizedLoaded) => {
+const routerToFn = (view: RouteLocationNormalizedLoaded) => {
   router.push(view.fullPath)
 }
+
+// 添加
+watch(route, (val) => addView(val), { immediate: true })
+
+// 刷新
+const refreshFn = (view: RouteLocationNormalizedLoaded) => {
+  refreshView(view)
+}
+
+// 删除单个
+const closeFn = (view: RouteLocationNormalizedLoaded) => {
+  delView(view).then(({ visitedViews }) => {
+    const latestView = visitedViews.slice(-1)[0]
+    if (latestView) {
+      router.push(latestView)
+    } else {
+      router.push({ name: 'Workbench' })
+    }
+  })
+}
+
+// 删除其他
+const closeOthersFn = (view: RouteLocationNormalizedLoaded) => {}
+
+// 删除全部
+const closeAllFn = (view: RouteLocationNormalizedLoaded) => {}
 
 /**
  * 右键菜单功能
@@ -131,6 +145,7 @@ const menuPosition = reactive({
   top: 0,
   left: 0
 })
+const currentView: Ref<RouteLocationNormalizedLoaded | null> = ref(null)
 const [menuVisible, menuHandler] = useFlag(false)
 const openMenu = (view: RouteLocationNormalizedLoaded, event: MouseEvent) => {
   if (appTags.value) {
@@ -145,6 +160,7 @@ const openMenu = (view: RouteLocationNormalizedLoaded, event: MouseEvent) => {
 
     menuHandler.set(true)
     document.body.addEventListener('click', closeMenu)
+    currentView.value = view
   }
 }
 const closeMenu = () => {

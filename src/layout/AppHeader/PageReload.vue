@@ -1,25 +1,16 @@
 <template>
-  <span class="app-page-reload" @click="refresh">
+  <span class="app-page-reload" @click="refreshView(route)">
     <SvgIcon href="icon-sync" class="app-page-reload__icon" />
   </span>
 </template>
 
 <script lang="ts" setup>
 import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
-// todo: 根据路由进行刷新
-import { useRoute, useRouter } from 'vue-router'
-const router = useRouter()
+import { useTagsViewStore } from '@/store'
+
+import { useRoute } from 'vue-router'
 const route = useRoute()
-const refresh = () => {
-  router.replace({
-    name: 'redirect',
-    query: {
-      prename: route.name as string,
-      preparams: JSON.stringify(route.params),
-      prequery: JSON.stringify(route.query)
-    }
-  })
-}
+const { refreshView } = useTagsViewStore()
 </script>
 
 <style lang="scss">
