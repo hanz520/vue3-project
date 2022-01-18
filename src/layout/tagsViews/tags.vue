@@ -1,36 +1,60 @@
 <template>
   <div class="app-tags">
-    <div class="app-tags__item app-tags__item--active">
-      <span class="app-tags__icon"><SvgIcon href="icon-appstore" /></span>
-      首页
-      <span class="app-tags__close"><SvgIcon href="icon-close" /></span>
-    </div>
-    <div class="app-tags__item">
-      <span class="app-tags__icon"><SvgIcon href="icon-appstore" /></span>
-      工作台
-      <span class="app-tags__close"><SvgIcon href="icon-close" /></span>
-    </div>
-    <div class="app-tags__item">
-      <span class="app-tags__icon"><SvgIcon href="icon-setting" /></span>
-      用户管理
-      <span class="app-tags__close"><SvgIcon href="icon-close" /></span>
-    </div>
-    <div class="app-tags__item">
-      <span class="app-tags__icon"><SvgIcon href="icon-appstore" /></span>
-      权限管理
-      <span class="app-tags__close"><SvgIcon href="icon-close" /></span>
-    </div>
-    <div class="app-tags__item">
-      <span class="app-tags__icon"><SvgIcon href="icon-appstore" /></span>
-      角色管理
-      <span class="app-tags__close"><SvgIcon href="icon-close" /></span>
+    <div
+      v-for="view in visitedViews"
+      :key="view.fullPath"
+      :class="{ 'app-tags__item--active': isActive(view) }"
+      class="app-tags__item"
+      @click="routerTo(view)"
+    >
+      <span v-if="view.meta.icon" class="app-tags__icon"><SvgIcon :href="`${view.meta.icon as string}`" /></span>
+      {{ view.meta.title }}
+      <span v-if="!isHideClose(view)" class="app-tags__close" @click="delView(view)"
+        ><SvgIcon href="icon-close"
+      /></span>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
+import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
+import { useTagsViewStore } from '@/store/index'
+
+const route = useRoute()
+const router = useRouter()
+const { visitedViews, addView, delView, cachedViews } = useTagsViewStore()
+
+// 当前显示路由
+const isActive = (view: RouteLocationNormalizedLoaded) => {
+  return view.path === route.path
+}
+
+//
+const isHideClose = (view: RouteLocationNormalizedLoaded) => {
+  return cachedViews.length === 1 && view.name === 'Workbench'
+}
+
+// 添加缓存
+watch(
+  route,
+  (val) => {
+    addView(val)
+  },
+  { immediate: true }
+)
+
+// 默认显示Workbench
+watch(visitedViews, () => {
+  if (visitedViews.length == 0) {
+    router.push({ name: 'Workbench' })
+  }
+})
+// 跳转
+const routerTo = (view: RouteLocationNormalizedLoaded) => {
+  router.push(view.fullPath)
+}
 </script>
 
 <style lang="scss">

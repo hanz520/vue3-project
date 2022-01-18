@@ -4,7 +4,7 @@
 </template>
 
 <script lang="ts">
-export default { name: 'ProductSet' }
+export default { name: 'ProductSetA' }
 </script>
 <script lang="ts" setup>
 import { ref } from 'vue'

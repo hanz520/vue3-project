@@ -1,5 +1,5 @@
 <template>
-  <div>角色管理</div>
+  <div>权限管理</div>
   <a-input v-model:value="name"></a-input>
 </template>
 <script lang="ts">

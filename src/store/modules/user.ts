@@ -4,8 +4,9 @@ import router, { asyncRoutes } from '@/router'
 import { RouteRecordRaw } from 'vue-router'
 import { useNavStore } from './nav'
 import { cloneDeep } from 'lodash'
+import useArrayTree from '@/composition/hooks/useArrayTree'
 
-export const userInfoMockData = {
+export const userInfoMockData: UserInfo = {
   username: 'admin',
   role: 'admin',
   id: '0000001',
@@ -213,34 +214,7 @@ interface UserState {
   authList: Auth[]
 }
 
-// type treeToArrayInter = <T>(data: T[], pname: string | null) => Array<T>
-// interface treeToArrayInter{
-//   <T>(data: T[], pname: string | null) :T[]
-// }
-/**
- * 工具方法 todo: 通过泛型格式化
- */
-// 树形结构数据转化为数组，并且追加pname属性
-const treeToArray: (data: Auth[], pname: string | null) => Array<Auth> = (data, pname) => {
-  return data.reduce((result: Auth[], current: Auth) => {
-    const { children, ...others } = current
-    result.push({ parent: pname, ...others })
-    if (children) {
-      result = [...result, ...treeToArray(children, others.name)]
-    }
-    return result
-  }, [])
-}
-const treeToArray2: (data: any[]) => Array<Auth> = (data) => {
-  return data.reduce((result: Auth[], current: Auth) => {
-    const { children, ...others } = current
-    result.push({ ...others })
-    if (children) {
-      result = [...result, ...treeToArray2(children)]
-    }
-    return result
-  }, [])
-}
+const { treeToArray } = useArrayTree()
 // 获取授予权限的路由
 const getAuthAsyncRoutes: (asyncRoutes: RouteRecordRaw[], authList: Auth[]) => RouteRecordRaw[] = (
   asyncRoutes,
@@ -281,7 +255,8 @@ export const useUserStore = defineStore({
     setUserInfo(info: UserInfo | null) {
       const storage = useStorage()
       if (info != null) {
-        this.authList = treeToArray(info.auth, null)
+        this.authList = treeToArray(info.auth, 'name', null)
+        console.log('this.authList', this.authList)
         this.userInfo = info
         this.appendAsyncRoute()
       } else {
@@ -294,9 +269,8 @@ export const useUserStore = defineStore({
     // 根据路由权限过滤并追加动态路由
     appendAsyncRoute() {
       const authAsyncRoutes = getAuthAsyncRoutes(asyncRoutes, this.authList)
-      // todo: 通过泛型优化此处
       // 此处将路由平级化，避免router-view嵌套
-      treeToArray2(authAsyncRoutes).map((asyncRoute) => {
+      treeToArray(authAsyncRoutes).map((asyncRoute) => {
         if (!asyncRoute.middleware) {
           router.addRoute('init', asyncRoute)
         }

@@ -22,13 +22,13 @@ const routes: RouteRecordRaw[] = [
         name: 'Workbench',
         component: () => import('@/views/workbench/Workbench.vue'),
         meta: { title: '工作台', icon: 'icon-appstore' }
-      },
-      {
-        path: 'home',
-        name: 'Home',
-        component: () => import('@/views/home/Home.vue'),
-        meta: { title: '首页', icon: 'icon-appstore' }
       }
+      // {
+      //   path: 'home',
+      //   name: 'Home',
+      //   component: () => import('@/views/home/Home.vue'),
+      //   meta: { title: '首页', icon: 'icon-appstore' }
+      // }
     ]
   },
   {
