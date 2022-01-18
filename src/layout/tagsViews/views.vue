@@ -5,7 +5,7 @@
       <router-view :key="key" />
     </keep-alive> -->
     <router-view v-slot="{ Component, route }">
-      <keep-alive :include="['Home', 'Workbench', 'Middleware']">
+      <keep-alive :include="['Home', 'Workbench', 'Role', 'User', 'Auth', 'ProductSet']">
         <component :is="Component" ref="component" :key="route.fullPath" />
       </keep-alive>
     </router-view>

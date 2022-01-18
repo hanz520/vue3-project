@@ -1,15 +1,15 @@
 <template>
   <div>产品集合</div>
+  <a-input v-model:value="name"></a-input>
 </template>
 
+<script lang="ts">
+export default { name: 'ProductSet' }
+</script>
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-const route = useRoute()
-console.log(route)
-onMounted(() => {
-  console.log(route)
-})
+import { ref } from 'vue'
+
+const name = ref('hanz')
 </script>
 
 <style lang="scss" scoped></style>

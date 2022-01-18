@@ -3,7 +3,9 @@ const system: RouteRecordRaw = {
   path: '/system-m',
   name: 'systemM',
   meta: { title: '系统管理', icon: 'icon-appstore' },
-  component: () => import('@/layout/middleware/Middleware.vue'),
+  middleware: true,
+  redirect: '/user',
+  // component: () => import('@/layout/middleware/Middleware.vue'),
   children: [
     {
       path: 'user',

@@ -1,13 +1,3 @@
 <template>
-  <router-view v-slot="{ Component, route }">
-    <keep-alive :include="['Auth', 'Role']">
-      <component :is="Component" ref="component" :key="route.fullPath" />
-    </keep-alive>
-  </router-view>
+  <div>这个页面并没什么卵用，始终会被优化掉的</div>
 </template>
-
-<script lang="ts">
-export default {
-  name: 'Middleware'
-}
-</script>

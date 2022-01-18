@@ -3,6 +3,7 @@ const product: RouteRecordRaw = {
   path: '/product-m',
   name: 'productM',
   meta: { title: '产品管理', icon: 'icon-appstore' },
+  middleware: true,
   component: () => import('@/layout/middleware/Middleware.vue'),
   children: [
     {
@@ -21,6 +22,7 @@ const product: RouteRecordRaw = {
       path: 'product-set',
       name: 'productSet',
       meta: { title: '产品集', icon: 'icon-appstore' },
+      middleware: true,
       component: () => import('@/layout/middleware/Middleware.vue'),
       children: [
         {

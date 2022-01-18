@@ -213,8 +213,12 @@ interface UserState {
   authList: Auth[]
 }
 
+// type treeToArrayInter = <T>(data: T[], pname: string | null) => Array<T>
+// interface treeToArrayInter{
+//   <T>(data: T[], pname: string | null) :T[]
+// }
 /**
- * 工具方法
+ * 工具方法 todo: 通过泛型格式化
  */
 // 树形结构数据转化为数组，并且追加pname属性
 const treeToArray: (data: Auth[], pname: string | null) => Array<Auth> = (data, pname) => {
@@ -223,6 +227,16 @@ const treeToArray: (data: Auth[], pname: string | null) => Array<Auth> = (data, 
     result.push({ parent: pname, ...others })
     if (children) {
       result = [...result, ...treeToArray(children, others.name)]
+    }
+    return result
+  }, [])
+}
+const treeToArray2: (data: any[]) => Array<Auth> = (data) => {
+  return data.reduce((result: Auth[], current: Auth) => {
+    const { children, ...others } = current
+    result.push({ ...others })
+    if (children) {
+      result = [...result, ...treeToArray2(children)]
     }
     return result
   }, [])
@@ -280,8 +294,12 @@ export const useUserStore = defineStore({
     // 根据路由权限过滤并追加动态路由
     appendAsyncRoute() {
       const authAsyncRoutes = getAuthAsyncRoutes(asyncRoutes, this.authList)
-      authAsyncRoutes.map((asyncRoute) => {
-        router.addRoute('init', asyncRoute)
+      // todo: 通过泛型优化此处
+      // 此处将路由平级化，避免router-view嵌套
+      treeToArray2(authAsyncRoutes).map((asyncRoute) => {
+        if (!asyncRoute.middleware) {
+          router.addRoute('init', asyncRoute)
+        }
       })
       const navStore = useNavStore()
       let routes = cloneDeep(router.options.routes[0].children) || []
