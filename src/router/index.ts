@@ -43,13 +43,14 @@ const routes: RouteRecordRaw[] = [
     path: '/redirect',
     name: 'redirect',
     component: () => import('@/layout/redirect/Redirect.vue'),
+    meta: { noCache: true },
     hide: true
   },
   {
     path: '/404',
     name: 'notFound',
     component: () => import('@/views/notFound/NotFound.vue'),
-    meta: { title: '404' },
+    meta: { title: '404', noCache: true },
     hide: true
   }
   // {

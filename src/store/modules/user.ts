@@ -256,7 +256,6 @@ export const useUserStore = defineStore({
       const storage = useStorage()
       if (info != null) {
         this.authList = treeToArray(info.auth, 'name', null)
-        console.log('this.authList', this.authList)
         this.userInfo = info
         this.appendAsyncRoute()
       } else {
@@ -271,7 +270,7 @@ export const useUserStore = defineStore({
       const authAsyncRoutes = getAuthAsyncRoutes(asyncRoutes, this.authList)
       // 此处将路由平级化，避免router-view嵌套
       treeToArray(authAsyncRoutes).map((asyncRoute) => {
-        if (!asyncRoute.middleware) {
+        if (!asyncRoute.meta?.middleware) {
           router.addRoute('init', asyncRoute)
         }
       })

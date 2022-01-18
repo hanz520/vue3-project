@@ -19,6 +19,11 @@ export const useTagsViewStore = defineStore({
   },
   actions: {
     addView(route: RouteLocationNormalizedLoaded) {
+      if (route.meta.noCache) {
+        console.log(route.name, '这个页面不需要缓存')
+        return false
+      }
+
       if (!this.visitedViews.some((view) => view.path === route.path)) {
         this.visitedViews.push(
           Object.assign({}, route, {

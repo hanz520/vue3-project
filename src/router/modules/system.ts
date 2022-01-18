@@ -2,8 +2,7 @@ import type { RouteRecordRaw } from 'vue-router'
 const system: RouteRecordRaw = {
   path: '/system-m',
   name: 'systemM',
-  meta: { title: '系统管理', icon: 'icon-appstore' },
-  middleware: true,
+  meta: { middleware: true, title: '系统管理', icon: 'icon-appstore' },
   redirect: '/user',
   // component: () => import('@/layout/middleware/Middleware.vue'),
   children: [
