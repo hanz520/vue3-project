@@ -4,7 +4,7 @@
       <div
         v-for="view in visitedViews"
         :key="view.fullPath"
-        ref="tag"
+        :ref="setTagRef"
         :class="{ 'app-tags__item--active': isActive(view) }"
         class="app-tags__item"
         @click="routerToFn(view)"
@@ -16,58 +16,7 @@
           ><SvgIcon href="icon-close"
         /></span>
       </div>
-      <!-- <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div>
-      <div class="app-tags__item">充数的标签</div> -->
+      <!-- <div class="app-tags__item">充数的标签</div> -->
     </div>
 
     <div
@@ -84,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getCurrentInstance, nextTick, reactive, Ref, ref, toRefs, watch } from 'vue'
+import { nextTick, onBeforeUpdate, reactive, Ref, ref, toRefs, watch } from 'vue'
 import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
 import { RouteLocationNormalizedLoaded, useRoute, useRouter } from 'vue-router'
 import { useTagsViewStore } from '@/store/index'
@@ -95,6 +44,7 @@ const router = useRouter()
 const tagsViewStore = useTagsViewStore()
 const { visitedViews, cachedViews } = toRefs(tagsViewStore)
 const { addView, delView, refreshView, delOtherView, delAllView } = tagsViewStore
+const content: Ref<HTMLDivElement | null> = ref(null)
 
 /**
  * 状态控制相关
@@ -113,15 +63,51 @@ const isHideClose = (view: RouteLocationNormalizedLoaded) => {
 const routerToFn = (view: RouteLocationNormalizedLoaded) => {
   router.push(view.fullPath)
 }
-// 移动到当前路由位置
-const tag: Ref<HTMLDivElement | null> = ref(null)
+// 移动到当前路由位置 todo: 此处类型不准确
+let tagRefs: any[] = []
+const setTagRef = (el: any) => {
+  if (el) tagRefs.push(el)
+}
+onBeforeUpdate(() => {
+  tagRefs = []
+})
+let si: any
+const scrollTo = (el: HTMLDivElement, target: number) => {
+  // el.scrollLeft = target
+  if (si) {
+    clearInterval(si) // 避免快速切换路由导致动画错误
+  }
+  const preScrollLeft = el.scrollLeft
+  const time = 20
+  const distance = (target - preScrollLeft) / time
+  let num = 0
+  si = setInterval(() => {
+    num++
+    el.scrollLeft += distance
+    if (num == time) {
+      clearInterval(si)
+      el.scrollLeft = target
+    }
+  }, 10)
+}
 const moveToCurrentTag = (view: RouteLocationNormalizedLoaded) => {
-  const Instance = getCurrentInstance()
-  console.log(Instance)
-  // nextTick(() => {
-  //   console.log('移动滚动条')
-  //   console.log(tag.value)
-  // })
+  nextTick(() => {
+    // 只有出现滚动条的情况下,才进行滚动条定位
+    if (content.value && content.value.scrollWidth > content.value.getBoundingClientRect().width) {
+      const index = visitedViews.value.findIndex((item) => item.path === view.path)
+      const tag: HTMLDivElement = tagRefs[index]
+
+      const clientWidth = document.documentElement.clientWidth || document.body.clientWidth
+      const tagRect = tag.getBoundingClientRect()
+      const contentRect = content.value.getBoundingClientRect()
+
+      // 从可视区域左侧滚动进可视区域：tagRect.left < contentRect.left
+      // 从可视区域右侧滚动进可视区域：tagRect.left > clientWidth - tagRect.width
+      if (tagRect.left > clientWidth - tagRect.width || tagRect.left < contentRect.left) {
+        scrollTo(content.value, tag.offsetLeft - 10) // 右偏移量 10
+      }
+    }
+  })
 }
 // 添加
 watch(
@@ -196,10 +182,8 @@ const closeMenu = () => {
 /**
  * 导航滚动功能
  */
-const content: Ref<HTMLDivElement | null> = ref(null)
 const scrollFn = (event: WheelEvent) => {
   if (content.value && content.value.scrollWidth > content.value.getBoundingClientRect().width) {
-    console.log('执行')
     // const eventDelta = event.wheelDelta || -event.deltaY * 40
     const eventDelta = event.deltaY
     content.value.scrollLeft = content.value.scrollLeft + eventDelta / 4
