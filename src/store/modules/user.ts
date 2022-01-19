@@ -14,6 +14,11 @@ export const userInfoMockData: UserInfo = {
   token: 'e6295f22b0644e06b186462d88bbf490',
   auth: [
     {
+      name: 'Workbench',
+      label: '工作台',
+      type: 'route'
+    },
+    {
       name: 'systemM',
       label: '系统管理',
       type: 'route',
@@ -199,8 +204,8 @@ interface Auth {
   name: string
   label: string
   type: 'route' | 'button'
-  parent?: string | null
   children?: Auth[]
+  [k: string]: any
 }
 
 interface UserInfo {
@@ -258,7 +263,12 @@ export const useUserStore = defineStore({
     setUserInfo(info: UserInfo | null) {
       const storage = useStorage()
       if (info != null) {
-        this.authList = treeToArray(info.auth, 'name', null)
+        this.authList = treeToArray(info.auth, (current, parent) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { children, ...others } = current
+          const currentCopy = { pname: parent ? parent.name : null, ...others } as Auth
+          return currentCopy
+        })
         this.userInfo = info
         this.appendAsyncRoute()
       } else {

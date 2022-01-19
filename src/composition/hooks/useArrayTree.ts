@@ -1,11 +1,12 @@
-import { cloneDeep } from 'lodash'
 interface AT {
-  pname?: string | null
   [k: string]: any
 }
 
+// interface extraFn {
+//   <T>(current: T, parent?: T): T
+// }
 interface ArrayTreeFn {
-  <T extends AT>(treeArray: T[], key?: string, pname?: string | null): T[]
+  <T extends AT>(treeArray: T[], extra?: (current: T, parent?: T) => T, parent?: T): T[]
 }
 
 export interface ArrayTreeController {
@@ -16,26 +17,23 @@ export default function useArrayTree(): ArrayTreeController {
   /**
    *
    * @param treeArray 需要进行转化为数组的树形数据
-   * @param key  用来给子元素设置pname的字段名称，如果为undefined，说明数据里面自带父子关系，不需要再设置
-   * @param pname 父元素的字段名称值
+   * @param extra  用于再进行才做的时候,给每一次遍历附加进去对应的逻辑
    * @returns
    */
-  const treeToArray: ArrayTreeFn = <T extends AT>(treeArray: T[], key?: string, pname?: string | null) => {
+  const treeToArray: ArrayTreeFn = <T extends AT>(
+    treeArray: T[],
+    extra?: (current: T, parent?: T) => T,
+    parent?: T
+  ) => {
     return treeArray.reduce((result: T[], current: T) => {
-      const item: T = cloneDeep(current)
-      const children: T[] = item.children
-      delete item.children
-      if (!key) {
-        result.push(item)
-        if (children) {
-          result = [...result, ...treeToArray(children)]
-        }
-      } else {
-        item.pname = pname
-        result.push(item)
-        if (children) {
-          result = [...result, ...treeToArray(children, key, item[key])]
-        }
+      const { children, ...others } = current
+      let currentCopy = { ...others } as T
+      if (extra) {
+        currentCopy = extra(current, parent)
+      }
+      result.push(currentCopy)
+      if (children) {
+        result = [...result, ...treeToArray(children, extra, current)]
       }
       return result
     }, [])
