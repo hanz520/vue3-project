@@ -125,11 +125,14 @@ const refreshFn = (view: RouteLocationNormalizedLoaded) => {
 // 删除单个
 const closeFn = (view: RouteLocationNormalizedLoaded) => {
   delView(view).then(({ visitedViews }) => {
-    const latestView = visitedViews.slice(-1)[0]
-    if (latestView) {
-      router.push(latestView)
-    } else {
-      router.push({ name: 'Workbench' })
+    // 如果删除的是当前处于激活状态的路由,进行处理
+    if (isActive(view)) {
+      const latestView = visitedViews.slice(-1)[0]
+      if (latestView) {
+        router.push(latestView)
+      } else {
+        router.push({ name: 'Workbench' })
+      }
     }
   })
 }
