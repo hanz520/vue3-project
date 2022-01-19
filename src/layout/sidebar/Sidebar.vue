@@ -20,23 +20,33 @@ import { toRefs, watch } from 'vue'
 import Logo from './Logo.vue'
 import Item from './Item.vue'
 import { useRoute } from 'vue-router'
+import { useUserStore } from '@/store'
 const useNav = useNavStore()
 const { routeList, active, collapsed, openKeys } = toRefs(useNav)
 const { setActive } = useNav
 
 // 根据路由变化选中高亮
 const route = useRoute()
+const getMatchedRouteName = () => {
+  const { authRoute } = useUserStore()
+  let tempRouteName = route.name as string
+  while (tempRouteName) {
+    authRoute.forEach((item) => {
+      if (openKeys.value.indexOf(tempRouteName) === -1) {
+        openKeys.value.push(tempRouteName)
+      }
+      if (item.name === tempRouteName) {
+        tempRouteName = item.pname
+      }
+    })
+  }
+}
 watch(
   route,
   () => {
     setActive([route.name] as string[])
     // 设置打开的item
-    route.matched.map((item) => {
-      const name = item.name as string
-      if (openKeys.value.indexOf(name) === -1) {
-        openKeys.value.push(name)
-      }
-    })
+    getMatchedRouteName()
   },
   { immediate: true }
 )
