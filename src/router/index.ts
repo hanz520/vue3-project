@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: 'workbench',
-        name: 'Workbench',
+        name: 'workbench',
         component: () => import('@/views/workbench/Workbench.vue'),
         meta: { title: '工作台', icon: 'icon-appstore' }
       }

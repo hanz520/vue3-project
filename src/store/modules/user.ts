@@ -13,11 +13,11 @@ export const userInfoMockData: UserInfo = {
   id: '0000001',
   token: 'e6295f22b0644e06b186462d88bbf490',
   auth: [
-    {
-      name: 'Workbench',
-      label: '工作台',
-      type: 'route'
-    },
+    // {
+    //   name: 'workbench',
+    //   label: '工作台',
+    //   type: 'route'
+    // },
     {
       name: 'systemM',
       label: '系统管理',
@@ -44,6 +44,11 @@ export const userInfoMockData: UserInfo = {
               type: 'button'
             }
           ]
+        },
+        {
+          name: 'userAdd',
+          label: '用户新增/编辑',
+          type: 'route'
         },
         {
           name: 'role',
@@ -96,50 +101,50 @@ export const userInfoMockData: UserInfo = {
       label: '产品管理',
       type: 'route',
       children: [
-        // {
-        //   name: 'classify',
-        //   label: '分类管理',
-        //   type: 'route',
-        //   children: [
-        //     {
-        //       name: 'classifyAdd',
-        //       label: '分类新增',
-        //       type: 'button'
-        //     },
-        //     {
-        //       name: 'classifyEdit',
-        //       label: '分类编辑',
-        //       type: 'button'
-        //     },
-        //     {
-        //       name: 'classifyDel',
-        //       label: '分类删除',
-        //       type: 'button'
-        //     }
-        //   ]
-        // },
-        // {
-        //   name: 'product',
-        //   label: '产品',
-        //   type: 'route',
-        //   children: [
-        //     {
-        //       name: 'productAdd',
-        //       label: '产品新增',
-        //       type: 'button'
-        //     },
-        //     {
-        //       name: 'productEdit',
-        //       label: '产品编辑',
-        //       type: 'button'
-        //     },
-        //     {
-        //       name: 'productDel',
-        //       label: '产品删除',
-        //       type: 'button'
-        //     }
-        //   ]
-        // },
+        {
+          name: 'classify',
+          label: '分类管理',
+          type: 'route',
+          children: [
+            {
+              name: 'classifyAdd',
+              label: '分类新增',
+              type: 'button'
+            },
+            {
+              name: 'classifyEdit',
+              label: '分类编辑',
+              type: 'button'
+            },
+            {
+              name: 'classifyDel',
+              label: '分类删除',
+              type: 'button'
+            }
+          ]
+        },
+        {
+          name: 'product',
+          label: '产品',
+          type: 'route',
+          children: [
+            {
+              name: 'productAdd',
+              label: '产品新增',
+              type: 'button'
+            },
+            {
+              name: 'productEdit',
+              label: '产品编辑',
+              type: 'button'
+            },
+            {
+              name: 'productDel',
+              label: '产品删除',
+              type: 'button'
+            }
+          ]
+        },
         {
           name: 'productSet',
           label: '产品集',
@@ -280,7 +285,8 @@ export const useUserStore = defineStore({
     },
     // 根据路由权限过滤并追加动态路由
     appendAsyncRoute() {
-      const authAsyncRoutes = getAuthAsyncRoutes(asyncRoutes, this.authList)
+      const authAsyncRoutes = getAuthAsyncRoutes(asyncRoutes, this.authRoute)
+      console.log(authAsyncRoutes)
       // 此处将路由平级化，避免router-view嵌套
       treeToArray(authAsyncRoutes).map((asyncRoute) => {
         if (!asyncRoute.meta?.middleware) {
