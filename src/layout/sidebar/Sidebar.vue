@@ -29,16 +29,15 @@ const { setActive } = useNav
 const route = useRoute()
 const getMatchedRouteName = () => {
   const { authRoute } = useUserStore()
-  let tempRouteName = route.name as string
+  let tempRouteName: string = route.name as string
   while (tempRouteName) {
-    authRoute.forEach((item) => {
-      if (openKeys.value.indexOf(tempRouteName) === -1) {
-        openKeys.value.push(tempRouteName)
-      }
-      if (item.name === tempRouteName) {
-        tempRouteName = item.pname
-      }
-    })
+    const auth = authRoute.find((item) => item.name === tempRouteName)
+    if (auth === undefined) return false // 如果路由不在权限路由内，不作处理，直接跳出循环
+    // 已经存入过的，不再存入
+    if (openKeys.value.indexOf(tempRouteName) === -1) {
+      openKeys.value.push(tempRouteName)
+    }
+    tempRouteName = auth.pname
   }
 }
 watch(
