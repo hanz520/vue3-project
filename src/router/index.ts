@@ -12,7 +12,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     name: 'init',
-    redirect: '/workbench',
+    redirect: 'workbench',
     meta: { title: '主页' },
     component: () => import('@/layout/Layout.vue'),
     hide: true,
