@@ -199,6 +199,7 @@ const scrollFn = (event: WheelEvent) => {
 .app-tags {
   width: 100%;
   height: 35px;
+  background: #ffffff;
   box-shadow: 0 2px 5px #0000002f;
   display: flex;
   justify-content: flex-start;
