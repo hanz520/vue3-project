@@ -204,6 +204,7 @@ const scrollFn = (event: WheelEvent) => {
   display: flex;
   justify-content: flex-start;
   position: relative;
+  z-index: 10;
   &__content {
     display: flex;
     justify-content: flex-start;
