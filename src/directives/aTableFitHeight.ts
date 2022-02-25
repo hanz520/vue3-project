@@ -1,8 +1,16 @@
+/**
+ * a-table 绑定属性
+ *  v-fit-height
+ *  :scroll="{ x: true, y: true }"
+ *  即可
+ *
+ */
+
 import { App } from 'vue'
 
 const install = (app: App) => {
   function setHeight(this: HTMLDivElement) {
-    this.style.maxHeight = document.body.clientHeight - this.getBoundingClientRect().top - 80 + 'px'
+    this.style.maxHeight = document.body.clientHeight - this.getBoundingClientRect().top - 100 + 'px'
   }
 
   app.directive('fit-height', {
