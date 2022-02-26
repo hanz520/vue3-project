@@ -146,13 +146,4 @@ const editUser = (record: ListItem) => console.log(record)
 const resetPassword = (record: ListItem) => console.log(record)
 const deleteUser = (record: ListItem) => console.log(record)
 </script>
-<style lang="scss">
-.app-section {
-  background: #fff;
-  padding: 20px;
-}
-.app-btntool {
-  text-align: right;
-  padding-bottom: 20px;
-}
-</style>
+<style lang="scss"></style>

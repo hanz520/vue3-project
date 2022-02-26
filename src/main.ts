@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 
 import 'normalize.css'
 import './common/css/reset.css'
+import './common/scss/main.scss'
 // import Antd from 'ant-design-vue'
 // import 'ant-design-vue/dist/antd.css'
 import router from './router'
