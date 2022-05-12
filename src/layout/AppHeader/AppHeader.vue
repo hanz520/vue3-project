@@ -4,6 +4,7 @@
     <div class="app-header__option">
       <Message />
       <FullScreen />
+      <!-- todo: 固定头部切换按钮 -->
       <Reload />
       <HeadUser />
     </div>
@@ -25,6 +26,7 @@ import HeadUser from './HeadUser.vue'
   padding: 0 10px;
   // box-shadow: 0 2px 3px #0000005b;
   border-bottom: 1px solid #dddddd;
+  background: #ffffff;
   display: flex;
   justify-content: space-between;
   @include e(option) {

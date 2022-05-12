@@ -23,5 +23,6 @@ import TagsViews from './tagsViews/tagsViews.vue'
 .app-container {
   flex: 1;
   overflow: hidden;
+  background: #f0f2f5;
 }
 </style>

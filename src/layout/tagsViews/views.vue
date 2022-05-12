@@ -19,6 +19,6 @@ const { cachedViews } = useTagsViewStore()
   width: 100%;
   height: calc(100% - 35px);
   overflow-y: auto;
-  padding: 20px;
+  padding: 15px;
 }
 </style>
