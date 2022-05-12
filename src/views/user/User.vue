@@ -1,6 +1,6 @@
 <template>
-  <div class="app-section" style="margin-bottom: 15px">
-    <Search />
+  <div class="app-section">
+    <Search ref="searchRef" :config="searchConfig" @search="doSearchFn"></Search>
   </div>
   <div class="app-section">
     <div class="app-btntool">
@@ -8,13 +8,13 @@
     </div>
     <a-table
       bordered
+      size="middle"
+      row-key="username"
+      :loading="loading"
       :columns="columns"
-      :row-key="(record: any) => record.username"
       :data-source="list"
       :scroll="{ x: true }"
       :pagination="pagination"
-      :loading="loading"
-      size="middle"
       @change="getListFn"
     >
       <template #bodyCell="{ column, record }">
@@ -29,9 +29,6 @@
             </a-popconfirm>
           </span>
         </template>
-        <template v-else>
-          <span>{{ record[column.dataIndex] }}</span>
-        </template>
       </template>
     </a-table>
   </div>
@@ -41,53 +38,61 @@
 export default { name: 'User' }
 </script>
 <script lang="ts" setup>
-import Search from '@/components/search/Search.vue'
+import Search, { SearchConfig } from '@/components/search/Search.vue'
 import useFlag from '@/composition/hooks/useFlag'
-import type { TableColumnProps, TableProps } from 'ant-design-vue'
+import type { TableColumnProps, TableProps, TablePaginationConfig } from 'ant-design-vue'
 import { onMounted, reactive, Ref, ref } from 'vue'
 
-const columns: TableColumnProps[] = [
+/**
+ * 搜索模块功能
+ */
+const searchRef: Ref<typeof Search | null> = ref(null)
+const data: SearchConfig[] = [
+  { type: 'input', name: 'username', label: '用户名' },
+  { type: 'input', name: 'phone', label: '手机号' },
+  { type: 'input', name: 'nickname', label: '昵称' },
   {
-    title: '用户名',
-    dataIndex: 'username',
-    width: 150
-  },
-  {
-    title: '昵称',
-    dataIndex: 'nickname',
-    width: 150
-  },
-  {
-    title: '注册时间',
-    dataIndex: 'createTime',
-    width: 150
-  },
-  {
-    title: '角色',
-    dataIndex: 'role',
-    width: 100
-  },
-  {
-    title: '手机号',
-    dataIndex: 'phone',
-    width: 110
-  },
-  {
-    title: '登录次数',
-    dataIndex: 'loginTimes',
-    width: 80
-  },
-  {
-    title: '操作',
-    dataIndex: 'action',
-    key: 'action',
-    fixed: 'right',
-    width: 270
+    type: 'select',
+    name: 'role',
+    label: '角色',
+    options: [
+      { label: '运维工程师', value: 1 },
+      { label: 'web工程师', value: 2 },
+      { label: 'php工程师', value: 3 },
+      { label: 'java工程师', value: 4 },
+      { label: 'python工程师', value: 5 }
+    ]
   }
 ]
+let searchConfig: Ref<SearchConfig[]> = ref(data)
+const doSearchFn = () => {
+  if (pagination) pagination.current = 1
+  getListFn()
+}
 
+/**
+ * 翻页模块定义
+ */
+type Pagination = TableProps['pagination']
+const pagination: Pagination = reactive({
+  current: 1,
+  pageSize: 20,
+  total: 0,
+  showTotal: (t: number) => `共${t}条`
+})
+
+/**
+ * 列表模块
+ */
+const columns: TableColumnProps[] = [
+  { title: '用户名', dataIndex: 'username', width: 150 },
+  { title: '昵称', dataIndex: 'nickname', width: 150 },
+  { title: '注册时间', dataIndex: 'createTime', width: 150 },
+  { title: '角色', dataIndex: 'role', width: 100 },
+  { title: '手机号', dataIndex: 'phone', width: 110 },
+  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 270 }
+]
 const [loading, { set: setLoading }] = useFlag(true)
-
 type ListItem = {
   id: string
   username: string
@@ -100,14 +105,9 @@ type ListItem = {
 }
 let list: Ref<ListItem[]> = ref([])
 
-type Pagination = TableProps['pagination']
-const pagination: Pagination = reactive({
-  pageSize: 20,
-  total: 0,
-  showTotal: (t: number) => `共${t}条`
-})
-
-const getListFn = (page: Pagination = pagination) => {
+const getListFn = (page: TablePaginationConfig = pagination) => {
+  const searchData = searchRef.value?.getSearchData()
+  console.log('查询数据', searchData, page)
   setLoading(true)
   setTimeout(() => {
     list.value = [
@@ -140,12 +140,12 @@ const getListFn = (page: Pagination = pagination) => {
       }
     ]
     pagination.total = 200
+    pagination.pageSize = page.pageSize
+    pagination.current = page.current
     setLoading(false)
   }, 1500)
 }
-onMounted(() => {
-  getListFn()
-})
+onMounted(() => getListFn())
 
 const editUser = (record: ListItem) => console.log(record)
 const resetPassword = (record: ListItem) => console.log(record)
