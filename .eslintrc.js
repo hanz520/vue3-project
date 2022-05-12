@@ -41,6 +41,7 @@ module.exports = {
   //   }
   // ],
   globals: {
-    defineProps: 'readonly'
+    defineProps: 'readonly',
+    AnyObject: 'readonly'
   }
 }
