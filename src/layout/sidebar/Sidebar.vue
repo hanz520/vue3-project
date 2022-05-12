@@ -2,14 +2,16 @@
   <div class="app-sidebar" :class="{ 'app-sidebar--collapsed': collapsed }">
     <Logo />
     <a-menu
-      v-if="routeList"
+      v-if="navTree"
       v-model:selectedKeys="active"
       v-model:openKeys="openKeys"
       mode="inline"
       :inline-collapsed="collapsed"
       theme="dark"
     >
-      <Item v-for="item in routeList" :key="item.name" :nav-item="item" />
+      <template v-for="item in navTree">
+        <Item v-if="item.showOnNav === 1" :key="item.action" :nav-item="item" />
+      </template>
     </a-menu>
   </div>
 </template>
@@ -20,24 +22,17 @@ import { toRefs, watch } from 'vue'
 import Logo from './Logo.vue'
 import Item from './Item.vue'
 import { useRoute } from 'vue-router'
-import { useUserStore } from '@/store'
 const useNav = useNavStore()
-const { routeList, active, collapsed, openKeys } = toRefs(useNav)
-const { setActive } = useNav
+const { navTree, navList, active, collapsed, openKeys } = toRefs(useNav)
+const { setActive, addOpenKeys } = useNav
 
 // 根据路由变化选中高亮
 const route = useRoute()
 const getMatchedRouteName = () => {
-  const { authRoute } = useUserStore()
-  let tempRouteName: string = route.name as string
-  while (tempRouteName) {
-    const auth = authRoute.find((item) => item.name === tempRouteName)
-    if (auth === undefined) return false // 如果路由不在权限路由内，不作处理，直接跳出循环
-    // 已经存入过的，不再存入
-    if (openKeys.value.indexOf(tempRouteName) === -1) {
-      openKeys.value.push(tempRouteName)
-    }
-    tempRouteName = auth.pname
+  let tempRouteName = route.name as string
+  const auth = navList.value?.find((item) => item.action === tempRouteName)
+  if (auth?.path) {
+    addOpenKeys(auth?.path)
   }
 }
 watch(

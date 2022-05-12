@@ -1,17 +1,19 @@
 <template>
   <template v-if="!navItem.hide">
-    <a-menu-item v-if="!hasSub" :key="navItem.name" @click="itemClick">
+    <a-menu-item v-if="!hasSub" :key="navItem.action" @click="itemClick">
       <template v-if="icon" #icon>
         <SvgIcon class="nav-item-icon" :href="icon" />
       </template>
-      <span>{{ navItem.meta?.title }}</span>
+      <span>{{ navItem.authName }}</span>
     </a-menu-item>
-    <a-sub-menu v-if="hasSub" :key="navItem.name">
+    <a-sub-menu v-if="hasSub" :key="navItem.action">
       <template v-if="icon" #icon>
         <SvgIcon class="nav-item-icon" :href="icon" />
       </template>
-      <template #title>{{ navItem.meta?.title }}</template>
-      <Item v-for="item in navItem.children" :key="item.name" :nav-item="item" />
+      <template #title>{{ navItem.authName }}</template>
+      <template v-for="item in navItem.children">
+        <Item v-if="item.showOnNav === 1" :key="item.action" :nav-item="item" />
+      </template>
     </a-sub-menu>
   </template>
 </template>
@@ -20,10 +22,11 @@
 import { computed, toRefs } from 'vue'
 import type { ComputedRef } from 'vue'
 import SvgIcon from '@/components/svgIcon/SvgIcon.vue'
-import { RouteRecordRaw, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
+import { Auth } from '@/store/modules/user'
 
-export interface PropsType {
-  navItem: RouteRecordRaw
+interface PropsType {
+  navItem: Auth
 }
 const props = defineProps<PropsType>()
 const { navItem } = toRefs(props)
@@ -40,11 +43,7 @@ const hasSub: ComputedRef<boolean> = computed(() => {
 })
 
 const icon: ComputedRef<string | undefined> = computed(() => {
-  if (navItem.value.meta?.icon) {
-    return navItem.value.meta?.icon as string
-  } else {
-    return undefined
-  }
+  return navItem.value?.icon
 })
 
 /**
@@ -52,13 +51,13 @@ const icon: ComputedRef<string | undefined> = computed(() => {
  */
 const router = useRouter()
 const itemClick = () => {
-  if (navItem.value.name && router.hasRoute(navItem.value.name)) {
+  if (navItem.value.action && router.hasRoute(navItem.value.action)) {
     router.push({
-      name: navItem.value.name
+      name: navItem.value.action
     })
   } else {
     router.push('/404')
-    console.error('sidebar组件找不到路由' + navItem.value)
+    console.error('路由未定义' + navItem.value)
   }
 }
 </script>

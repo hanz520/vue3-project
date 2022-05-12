@@ -67,7 +67,7 @@ const router = createRouter({
   routes
 })
 
-export const asyncRoutes: RouteRecordRaw[] = [system, product]
+export const asyncRoutes: RouteRecordRaw[] = [...system, ...product]
 
 const [combinedRoute, combinedRouteHandler] = useFlag(false)
 router.beforeEach((to, from, next) => {

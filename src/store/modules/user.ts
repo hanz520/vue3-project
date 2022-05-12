@@ -1,247 +1,96 @@
 import { defineStore } from 'pinia'
 import useStorage from '@/composition/hooks/useStorage'
 import router, { asyncRoutes } from '@/router'
-import { RouteRecordRaw } from 'vue-router'
 import { useNavStore } from './nav'
-import { cloneDeep } from 'lodash'
-import useArrayTree from '@/composition/hooks/useArrayTree'
 
 export const userInfoMockData: UserInfo = {
-  username: 'admin',
-  nickname: '年少不知愁滋味',
-  role: 'admin',
-  id: '0000001',
+  userDate: {
+    username: 'admin',
+    userId: '88888888',
+    nickname: '年少不识愁滋味',
+    phone: '18888888888'
+  },
+  role: ['admin'],
   token: 'e6295f22b0644e06b186462d88bbf490',
-  auth: [
-    // {
-    //   name: 'workbench',
-    //   label: '工作台',
-    //   type: 'route'
-    // },
+  authRoute: [
     {
-      name: 'systemM',
-      label: '系统管理',
-      type: 'route',
+      authName: '系统管理',
+      action: 'systemM',
+      type: 0,
+      icon: 'icon-appstore',
+      showOnNav: 1,
       children: [
-        {
-          name: 'user',
-          label: '用户管理',
-          type: 'route',
-          children: [
-            {
-              name: 'userAdd',
-              label: '用户新增',
-              type: 'button'
-            },
-            {
-              name: 'userEdit',
-              label: '用户编辑',
-              type: 'button'
-            },
-            {
-              name: 'userDel',
-              label: '用户删除',
-              type: 'button'
-            }
-          ]
-        },
-        {
-          name: 'userAdd',
-          label: '用户新增/编辑',
-          type: 'route'
-        },
-        {
-          name: 'role',
-          label: '角色管理',
-          type: 'route',
-          children: [
-            {
-              name: 'roleAdd',
-              label: '角色新增',
-              type: 'button'
-            },
-            {
-              name: 'roleEdit',
-              label: '角色编辑',
-              type: 'button'
-            },
-            {
-              name: 'roleDel',
-              label: '角色删除',
-              type: 'button'
-            }
-          ]
-        },
-        {
-          name: 'auth',
-          label: '权限管理',
-          type: 'route',
-          children: [
-            {
-              name: 'authAdd',
-              label: '权限新增',
-              type: 'button'
-            },
-            {
-              name: 'authEdit',
-              label: '权限编辑',
-              type: 'button'
-            },
-            {
-              name: 'authDel',
-              label: '权限删除',
-              type: 'button'
-            }
-          ]
-        }
+        { authName: '用户管理', action: 'user', type: 1, icon: 'icon-appstore', showOnNav: 1 },
+        { authName: '用户新增/编辑', action: 'userAdd', type: 1, icon: 'icon-appstore', showOnNav: 0 },
+        { authName: '角色管理', action: 'role', type: 1, icon: 'icon-appstore', showOnNav: 1 },
+        { authName: '权限管理', action: 'auth', type: 1, icon: 'icon-appstore', showOnNav: 1 }
       ]
     },
     {
-      name: 'productM',
-      label: '产品管理',
-      type: 'route',
+      authName: '产品管理',
+      action: 'productM',
+      type: 0,
+      icon: 'icon-appstore',
+      showOnNav: 1,
       children: [
+        { authName: '分类管理', action: 'classify', type: 1, icon: 'icon-appstore', showOnNav: 1 },
+        { authName: '产品', action: 'product', type: 1, icon: 'icon-appstore', showOnNav: 1 },
         {
-          name: 'classify',
-          label: '分类管理',
-          type: 'route',
+          authName: '产品集',
+          action: 'productSet',
+          type: 0,
+          icon: 'icon-appstore',
+          showOnNav: 1,
           children: [
-            {
-              name: 'classifyAdd',
-              label: '分类新增',
-              type: 'button'
-            },
-            {
-              name: 'classifyEdit',
-              label: '分类编辑',
-              type: 'button'
-            },
-            {
-              name: 'classifyDel',
-              label: '分类删除',
-              type: 'button'
-            }
-          ]
-        },
-        {
-          name: 'product',
-          label: '产品',
-          type: 'route',
-          children: [
-            {
-              name: 'productAdd',
-              label: '产品新增',
-              type: 'button'
-            },
-            {
-              name: 'productEdit',
-              label: '产品编辑',
-              type: 'button'
-            },
-            {
-              name: 'productDel',
-              label: '产品删除',
-              type: 'button'
-            }
-          ]
-        },
-        {
-          name: 'productSet',
-          label: '产品集',
-          type: 'route',
-          children: [
-            {
-              name: 'productSetA',
-              label: '产品集A',
-              type: 'route',
-              children: [
-                {
-                  name: 'productSetAAdd',
-                  label: '产品集A新增',
-                  type: 'button'
-                },
-                {
-                  name: 'productSetAEdit',
-                  label: '产品集A编辑',
-                  type: 'button'
-                },
-                {
-                  name: 'productSetADel',
-                  label: '产品集A删除',
-                  type: 'button'
-                }
-              ]
-            },
-            {
-              name: 'productSetB',
-              label: '产品集B',
-              type: 'route',
-              children: [
-                {
-                  name: 'productSetBAdd',
-                  label: '产品集B新增',
-                  type: 'button'
-                },
-                {
-                  name: 'productSetBEdit',
-                  label: '产品集B编辑',
-                  type: 'button'
-                },
-                {
-                  name: 'productSetBDel',
-                  label: '产品集B删除',
-                  type: 'button'
-                }
-              ]
-            }
+            { authName: '产品集A', action: 'productSetA', type: 1, icon: 'icon-appstore', showOnNav: 1 },
+            { authName: '产品集B', action: 'productSetB', type: 1, icon: 'icon-appstore', showOnNav: 1 }
           ]
         }
       ]
     }
-  ]
+  ],
+  authView: ['workbenchTable', 'workbenchEchart']
 }
 
 /**
  * 类型定义
  */
 
-interface Auth {
-  name: string
-  label: string
-  type: 'route' | 'button'
+enum AuthType {
+  level = 0,
+  route = 1,
+  interface = 2,
+  view = 3
+}
+
+export interface Auth {
+  authName: string // 权限名称
+  type: AuthType // 权限类型
+  action?: string // 权限功能
+  icon?: string // 路由图标class
+  showOnNav?: 1 | 0 // 是否在路由显示
   children?: Auth[]
+  path?: string[] // 通过genPath生成的导航路径
   [k: string]: any
 }
 
-interface UserInfo {
+interface UserDate {
   username: string
-  role: string
-  id: string
+  nickname: string
+  userId: string
+  phone: string
+}
+
+interface UserInfo {
+  userDate: UserDate
+  role: string[]
   token: string
-  auth: Auth[]
+  authRoute: Auth[] // 权限 -> 路由（包括层级），树形结构
+  authView: string[] // 权限 -> 视图
   [k: string]: any
 }
 interface UserState {
   userInfo: UserInfo | null
-  authList: Auth[]
-}
-
-const { treeToArray } = useArrayTree()
-// 获取授予权限的路由
-const getAuthAsyncRoutes: (asyncRoutes: RouteRecordRaw[], authList: Auth[]) => RouteRecordRaw[] = (
-  asyncRoutes,
-  authList
-) => {
-  return asyncRoutes.filter((route) => {
-    if (authList.findIndex((auth) => auth.name === route.name) > -1) {
-      if (route.children) {
-        route.children = getAuthAsyncRoutes(route.children, authList)
-      }
-      return true
-    } else {
-      return false
-    }
-  })
 }
 
 /**
@@ -251,61 +100,67 @@ export const useUserStore = defineStore({
   id: 'user',
   state(): UserState {
     return {
-      userInfo: null,
-      authList: []
+      userInfo: null
     }
   },
   getters: {
-    username: (state: UserState) => state.userInfo?.username,
-    nickname: (state: UserState) => state.userInfo?.nickname,
     logged: ({ userInfo }: UserState) => userInfo !== null,
     token: ({ userInfo }: UserState) => userInfo?.token,
-    authRoute: ({ authList }: UserState) => authList.filter((item) => item.type === 'route'), // 权限-->路由
-    authButton: ({ authList }: UserState) => authList.filter((item) => item.type === 'button') // 权限-->按钮
+    userDate: ({ userInfo }: UserState) => userInfo?.userDate,
+    username: (state: UserState) => state.userInfo?.userDate?.username,
+    nickname: (state: UserState) => state.userInfo?.userDate?.nickname,
+    authRoute: ({ userInfo }: UserState) => userInfo?.authRoute || [], // 权限-->路由
+    authView: ({ userInfo }: UserState) => userInfo?.authView || [] // 权限-->视图
+    // authRoute: ({ authList }: UserState) => authList.filter((item) => item.type === 'route'), // 权限-->路由
+    // authButton: ({ authList }: UserState) => authList.filter((item) => item.type === 'button') // 权限-->按钮
   },
   actions: {
     // 设置用户信息
     setUserInfo(info: UserInfo | null) {
       const storage = useStorage()
+      const navStore = useNavStore()
       if (info != null) {
-        this.authList = treeToArray(info.auth, (current, parent) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { children, ...others } = current
-          const currentCopy = { pname: parent ? parent.name : null, ...others } as Auth
-          return currentCopy
-        })
         this.userInfo = info
-        this.appendAsyncRoute()
+        this.appendAsyncRoute(this.authRoute)
       } else {
-        this.removeAsyncRoute()
-        this.authList = []
+        this.removeAsyncRoute(this.authRoute)
         this.userInfo = null
       }
+      navStore.initNavData(this.authRoute) // 初始化导航数据
       storage.setItem('userInfo', this.userInfo)
     },
-    // 根据路由权限过滤并追加动态路由
-    appendAsyncRoute() {
-      const authAsyncRoutes = getAuthAsyncRoutes(asyncRoutes, this.authRoute)
-      console.log(authAsyncRoutes)
-      // 此处将路由平级化，避免router-view嵌套
-      treeToArray(authAsyncRoutes).map((asyncRoute) => {
-        if (!asyncRoute.meta?.middleware) {
-          router.addRoute('init', asyncRoute)
+    // 添加动态路由
+    appendAsyncRoute(authRoute: Auth[]) {
+      authRoute.forEach((auth) => {
+        if (auth.type === AuthType.route) {
+          const asyncRoute = asyncRoutes.find((route) => route.name === auth.action)
+          if (asyncRoute) {
+            if (auth.action && !router.hasRoute(auth.action)) {
+              router.addRoute('init', asyncRoute)
+            }
+          } else {
+            console.warn(`未找到路由 ${auth.action}`)
+          }
+        }
+        if (auth.children) {
+          this.appendAsyncRoute(auth.children)
         }
       })
-      const navStore = useNavStore()
-      let routes = cloneDeep(router.options.routes[0].children) || []
-      routes = routes.concat(authAsyncRoutes)
-      navStore.initNavList(routes)
     },
-    // 移出动态路由
-    removeAsyncRoute() {
-      this.authRoute.forEach((route) => {
-        if (router.hasRoute(route.name)) router.removeRoute(route.name)
+    // 移除动态路由
+    removeAsyncRoute(authRoute: Auth[]) {
+      authRoute.forEach((auth) => {
+        if (auth.type === AuthType.route) {
+          if (auth.action && router.hasRoute(auth.action)) {
+            router.removeRoute(auth.action)
+          } else {
+            console.warn(`未注册路由 ${auth.action}`)
+          }
+        }
+        if (auth.children) {
+          this.removeAsyncRoute(auth.children)
+        }
       })
-      const navStore = useNavStore()
-      const routes = cloneDeep(router.options.routes[0].children) || []
-      navStore.initNavList(routes)
     }
   }
 })
