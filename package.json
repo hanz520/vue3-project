@@ -14,7 +14,7 @@
     "@types/nprogress": "^0.2.0",
     "@types/qs": "^6.9.7",
     "@vueuse/core": "^7.1.2",
-    "ant-design-vue": "^2.2.8",
+    "ant-design-vue": "^3.2.3",
     "axios": "^0.24.0",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
