@@ -17,16 +17,21 @@
       size="middle"
       @change="getListFn"
     >
-      <template #action="{ record }">
-        <span>
-          <a-button type="link" size="small" @click="editUser(record)"><svg-icon href="icon-edit" />编辑</a-button>
-          <a-button type="link" size="small" @click="resetPassword(record)">
-            <svg-icon href="icon-reset-password" />重置密码
-          </a-button>
-          <a-popconfirm title="确定要删除吗？" @confirm="deleteUser(record)">
-            <a-button type="link" danger size="small"><svg-icon href="icon-delete" />删除</a-button>
-          </a-popconfirm>
-        </span>
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <span>
+            <a-button type="link" size="small" @click="editUser(record)"><svg-icon href="icon-edit" />编辑</a-button>
+            <a-button type="link" size="small" @click="resetPassword(record)">
+              <svg-icon href="icon-reset-password" />重置密码
+            </a-button>
+            <a-popconfirm title="确定要删除吗？" @confirm="deleteUser(record)">
+              <a-button type="link" danger size="small"><svg-icon href="icon-delete" />删除</a-button>
+            </a-popconfirm>
+          </span>
+        </template>
+        <template v-else>
+          <span>{{ record[column.dataIndex] }}</span>
+        </template>
       </template>
     </a-table>
   </div>
@@ -38,10 +43,10 @@ export default { name: 'User' }
 <script lang="ts" setup>
 import Search from '@/components/search/Search.vue'
 import useFlag from '@/composition/hooks/useFlag'
-import { ColumnProps, TableState } from 'ant-design-vue/lib/table/interface'
+import type { TableColumnProps, TableProps } from 'ant-design-vue'
 import { onMounted, reactive, Ref, ref } from 'vue'
 
-const columns: ColumnProps[] = [
+const columns: TableColumnProps[] = [
   {
     title: '用户名',
     dataIndex: 'username',
@@ -75,9 +80,9 @@ const columns: ColumnProps[] = [
   {
     title: '操作',
     dataIndex: 'action',
+    key: 'action',
     fixed: 'right',
-    width: 150,
-    slots: { customRender: 'action' }
+    width: 270
   }
 ]
 
@@ -95,7 +100,7 @@ type ListItem = {
 }
 let list: Ref<ListItem[]> = ref([])
 
-type Pagination = TableState['pagination']
+type Pagination = TableProps['pagination']
 const pagination: Pagination = reactive({
   pageSize: 20,
   total: 0,
