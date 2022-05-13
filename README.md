@@ -15,3 +15,20 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 ## 添加commitlint husky
 
 ## 添加eslint
+
+## 新增编辑组件命名规则
+
+- a add 新增
+- e edit  编辑
+- m modal 弹框
+- v view  页面
+
+如：aemAuth 代表新增/编辑权限的弹框，avAuth代表新增权限的界面
+
+## 页面组件需要添加组件名，用于缓存使用
+
+```js
+<script lang="ts">
+export default { name: 'Auth' }
+</script>
+```
