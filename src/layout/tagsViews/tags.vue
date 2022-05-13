@@ -216,6 +216,7 @@ const scrollFn = (event: WheelEvent) => {
     &:hover {
       overflow-x: auto;
     }
+    @include thin-scroll();
   }
   &__item {
     padding: 0 10px;

@@ -62,5 +62,6 @@ watch(
       width: 50px;
     }
   }
+  @include thin-scroll();
 }
 </style>

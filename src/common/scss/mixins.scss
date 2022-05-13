@@ -254,3 +254,22 @@
   } 
 }
 
+@mixin thin-scroll() {
+  &::-webkit-scrollbar {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  &::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  &::-webkit-scrollbar {
+    height: 4px;
+    width: 4px;
+  }
+}
