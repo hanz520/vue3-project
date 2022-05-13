@@ -90,7 +90,7 @@ const columns: TableColumnProps[] = [
   { title: '注册时间', dataIndex: 'createTime', width: 150 },
   { title: '角色', dataIndex: 'role', width: 100 },
   { title: '手机号', dataIndex: 'phone', width: 110 },
-  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 270 }
+  { title: '操作', dataIndex: 'action', key: 'action', fixed: 'right', width: 230 }
 ]
 const [loading, { set: setLoading }] = useFlag(true)
 type ListItem = {

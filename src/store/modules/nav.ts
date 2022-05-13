@@ -10,15 +10,6 @@ interface NavState {
   collapsed: boolean
 }
 
-// 工作台是所有用户都可以看到的，哪怕没有任何权限的用户
-const workbench: Auth = {
-  authName: '工作台',
-  action: 'workbench',
-  type: 0,
-  icon: 'icon-appstore',
-  showOnNav: 1
-}
-
 // 生成导航路径path
 const genPath = (list: Auth[], path: string[]) => {
   list.forEach((nav) => {
@@ -45,7 +36,7 @@ export const useNavStore = defineStore({
   },
   actions: {
     initNavData(data: Auth[]) {
-      const navTree = [workbench, ...data]
+      const navTree = data
       genPath(navTree, [])
       this.navTree = navTree
       const { treeToArray } = useArrayTree()

@@ -14,38 +14,25 @@ export const userInfoMockData: UserInfo = {
   token: 'e6295f22b0644e06b186462d88bbf490',
   authRoute: [
     {
+      id: 1,
+      authName: '工作台',
+      action: 'workbench',
+      type: 1,
+      icon: 'icon-appstore',
+      showOnNav: 1
+    },
+    {
+      id: 2,
       authName: '系统管理',
       action: 'systemM',
       type: 0,
       icon: 'icon-appstore',
       showOnNav: 1,
       children: [
-        { authName: '用户管理', action: 'user', type: 1, icon: 'icon-appstore', showOnNav: 1 },
-        { authName: '用户新增/编辑', action: 'userAdd', type: 1, icon: 'icon-appstore', showOnNav: 0 },
-        { authName: '角色管理', action: 'role', type: 1, icon: 'icon-appstore', showOnNav: 1 },
-        { authName: '权限管理', action: 'auth', type: 1, icon: 'icon-appstore', showOnNav: 1 }
-      ]
-    },
-    {
-      authName: '产品管理',
-      action: 'productM',
-      type: 0,
-      icon: 'icon-appstore',
-      showOnNav: 1,
-      children: [
-        { authName: '分类管理', action: 'classify', type: 1, icon: 'icon-appstore', showOnNav: 1 },
-        { authName: '产品', action: 'product', type: 1, icon: 'icon-appstore', showOnNav: 1 },
-        {
-          authName: '产品集',
-          action: 'productSet',
-          type: 0,
-          icon: 'icon-appstore',
-          showOnNav: 1,
-          children: [
-            { authName: '产品集A', action: 'productSetA', type: 1, icon: 'icon-appstore', showOnNav: 1 },
-            { authName: '产品集B', action: 'productSetB', type: 1, icon: 'icon-appstore', showOnNav: 1 }
-          ]
-        }
+        { id: 7, authName: '用户管理', action: 'user', type: 1, icon: 'icon-appstore', showOnNav: 1 },
+        { id: 8, authName: '用户新增/编辑', action: 'userAdd', type: 1, icon: 'icon-appstore', showOnNav: 0 },
+        { id: 9, authName: '角色管理', action: 'role', type: 1, icon: 'icon-appstore', showOnNav: 1 },
+        { id: 10, authName: '权限管理', action: 'auth', type: 1, icon: 'icon-appstore', showOnNav: 1 }
       ]
     }
   ],
