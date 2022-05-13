@@ -56,14 +56,21 @@ export const userInfoMockData: UserInfo = {
  * 类型定义
  */
 
-enum AuthType {
+// 权限类型枚举
+export enum authType {
   level = 0,
   route = 1,
   interface = 2,
   view = 3
 }
 
+type AuthType = 0 | 1 | 2 | 3
+
+/**
+ * todo: id是必填
+ */
 export interface Auth {
+  id?: number
   authName: string // 权限名称
   type: AuthType // 权限类型
   action?: string // 权限功能
@@ -132,7 +139,7 @@ export const useUserStore = defineStore({
     // 添加动态路由
     appendAsyncRoute(authRoute: Auth[]) {
       authRoute.forEach((auth) => {
-        if (auth.type === AuthType.route) {
+        if (auth.type === authType.route) {
           const asyncRoute = asyncRoutes.find((route) => route.name === auth.action)
           if (asyncRoute) {
             if (auth.action && !router.hasRoute(auth.action)) {
@@ -150,7 +157,7 @@ export const useUserStore = defineStore({
     // 移除动态路由
     removeAsyncRoute(authRoute: Auth[]) {
       authRoute.forEach((auth) => {
-        if (auth.type === AuthType.route) {
+        if (auth.type === authType.route) {
           if (auth.action && router.hasRoute(auth.action)) {
             router.removeRoute(auth.action)
           } else {
