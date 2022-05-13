@@ -13,7 +13,7 @@
       :loading="loading"
       :columns="columns"
       :data-source="list"
-      :scroll="{ x: true }"
+      :scroll="{ x: '100%' }"
       :pagination="pagination"
       @change="getListFn"
     >

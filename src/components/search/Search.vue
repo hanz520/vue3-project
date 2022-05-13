@@ -27,10 +27,10 @@
     </template>
     <slot />
     <a-form-item>
-      <a-button type="primary" @click="searchFn">搜索</a-button>
-    </a-form-item>
-    <a-form-item>
-      <a-button @click="resetFn">重置</a-button>
+      <a-space>
+        <a-button type="primary" @click="searchFn">搜索</a-button>
+        <a-button @click="resetFn">重置</a-button>
+      </a-space>
     </a-form-item>
   </a-form>
 </template>
