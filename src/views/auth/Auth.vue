@@ -35,7 +35,7 @@
             :disabled="record.type === authType.interface || record.type === authType.view"
             @click="addFn(record)"
           >
-            <svg-icon href="icon-add" />添加下级
+            <svg-icon href="icon-plus" />添加下级
           </a-button>
           <a-button type="link" size="small" @click="editFn(record)"> <svg-icon href="icon-edit" />编辑 </a-button>
           <a-popconfirm

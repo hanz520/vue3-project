@@ -125,7 +125,7 @@ const [visible, { set: setVisible }] = useFlag(false)
 const open = (data: Auth | null, parentId: number) => {
   modalType.value = data !== null ? 'edit' : 'add'
   formRef.value?.resetFields()
-  Object.assign(formData, { parentId, type: 0, authName: null, action: null, onlyAdmin: 0 }, data || {})
+  Object.assign(formData, { parentId, type: 0, authName: null, action: null, icon: null, onlyAdmin: 0 }, data)
   setVisible(true)
 }
 

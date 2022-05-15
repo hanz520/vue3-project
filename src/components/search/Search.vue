@@ -35,13 +35,8 @@
   </a-form>
 </template>
 
-<script lang="ts">
-export default { name: 'Auth' }
-</script>
-
 <script lang="ts" setup>
 import { reactive, Ref, ref, toRefs, watchEffect } from 'vue'
-
 /**
  * 类型定义
  */
@@ -109,6 +104,7 @@ const filterOption = (input: string, option: any) => {
 const searchData: AnyObject = reactive({})
 
 // 获取搜索内容
+// todo  可以以 use 的方式实现此块功能，如antdv Form.useForm一样
 const getSearchData = () => {
   return searchData
 }
