@@ -8,6 +8,9 @@
           :style="`width: ${item.width}px`"
         />
       </a-form-item>
+
+      <slot v-if="item.type === 'slot'" :name="item.name" :item="item" />
+
       <a-form-item v-if="item.type === 'select'" :label="showLabel ? item.label : ''">
         <a-select
           v-model:value="searchData[item.name]"
@@ -25,7 +28,6 @@
         </a-select>
       </a-form-item>
     </template>
-    <slot />
     <a-form-item>
       <a-space>
         <a-button type="primary" @click="searchFn">搜索</a-button>
@@ -45,24 +47,15 @@ export interface TypeSearchConfigSelection {
   value: number | string
 }
 
-export type SearchConfig =
-  | {
-      type: 'input'
-      name: string
-      label: string
-      placeholder?: string
-      width?: number
-      options?: TypeSearchConfigSelection[]
-    }
-  | {
-      type: 'select'
-      name: string
-      label: string
-      placeholder?: string
-      width?: number
-      selectMode?: 'combobox' | 'multiple'
-      options: TypeSearchConfigSelection[]
-    }
+export type SearchConfig = {
+  type: 'input' | 'select' | 'slot'
+  name: string
+  label: string
+  placeholder?: string
+  width?: number
+  selectMode?: 'combobox' | 'multiple'
+  options?: TypeSearchConfigSelection[]
+}
 
 /**
  * 父组件传参接收
@@ -88,6 +81,9 @@ watchEffect(() => {
   configRender.value = config.value
   // 补全未配置项
   configRender.value.forEach((item) => {
+    if (item.type === 'slot') {
+      return false
+    }
     item.placeholder = item.placeholder || placeholderText[item.type] + (item.label || '')
     item.width = item.width || 180
     if (item.type === 'select') {
