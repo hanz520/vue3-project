@@ -10,7 +10,7 @@
     >
       <a-form-item label="上级节点" name="parentId">
         <a-tree-select
-          key="action"
+          key="id"
           v-model:value="formData.parentId"
           :tree-line="true && { showLeafIcon: false }"
           :field-names="{ value: 'id' }"
