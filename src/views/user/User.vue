@@ -4,7 +4,10 @@
   </div>
   <div class="app-section">
     <div class="app-btntool">
-      <a-button type="primary" @click="addEditUserFn(null)">新建用户</a-button>
+      <a-space>
+        <customVue module-name="user" :columns="defaultColumns" />
+        <a-button type="primary" @click="addEditUserFn(null)">新建用户</a-button>
+      </a-space>
     </div>
     <a-table
       bordered
@@ -52,6 +55,7 @@
 export default { name: 'User' }
 </script>
 <script lang="ts" setup>
+import customVue from '@/components/custom'
 import Search, { SearchConfig } from '@/components/search/Search.vue'
 import useFlag from '@/composition/hooks/useFlag'
 import type { TableColumnProps, TableProps, TablePaginationConfig } from 'ant-design-vue'
@@ -101,7 +105,7 @@ const pagination: Pagination = reactive({
 /**
  * 列表模块
  */
-const columns: TableColumnProps[] = [
+const defaultColumns: TableColumnProps[] = [
   { title: '用户名', dataIndex: 'username', width: 150 },
   { title: '真实姓名', dataIndex: 'realName', width: 150 },
   { title: '角色', dataIndex: 'role', width: 100 },
@@ -114,10 +118,10 @@ const columns: TableColumnProps[] = [
   { title: '更新时间', dataIndex: 'updatedAt', width: 110 },
   { title: '操作', dataIndex: 'action', fixed: 'right', width: 230 }
 ]
+const { columns } = customVue.useCustom('user', { columns: defaultColumns })
+
+const list: Ref<User[]> = ref([])
 const [loading, { set: setLoading }] = useFlag(true)
-
-let list: Ref<User[]> = ref([])
-
 const getListFn = (page: TablePaginationConfig = pagination) => {
   const searchData = searchRef.value?.getSearchData()
   console.log('查询数据', searchData, page)
