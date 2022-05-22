@@ -5,6 +5,7 @@ import { useCustomStore } from '@/store'
 
 export interface CustomController {
   columns: Ref<TableColumnProps[]> // 用户自定义显示的列
+  filter: Ref<any[]>
 }
 
 interface Config {
@@ -18,6 +19,7 @@ export type UseCustom = (name: string, config: Config) => CustomController
 export default function useCustom(name: string, config: Config): CustomController {
   const moduleName = name
   const customStore = useCustomStore()
+  const { customMap, getColumn, getFilter } = customStore
 
   /**
    * 表格列
@@ -25,12 +27,11 @@ export default function useCustom(name: string, config: Config): CustomControlle
   const columnsFlag = config.columns !== undefined // 是否需要进行表格列配置
   const defaultColumns: TableColumnProps[] = config.columns ?? []
   const columns: Ref<TableColumnProps[]> = ref(defaultColumns)
-  const { customMap, getColumn } = customStore
   const initColumns = async () => {
     columns.value = await getColumn(moduleName, defaultColumns)
   }
   const updateColumns = () => {
-    columns.value = customMap[moduleName].column
+    columns.value = customMap[moduleName].column ?? defaultColumns // 如果为空，直接用默认的配置
   }
   if (columnsFlag) {
     initColumns()
@@ -39,6 +40,18 @@ export default function useCustom(name: string, config: Config): CustomControlle
   /**
    * 搜索项
    */
+  const filterFlag = config.filter !== undefined
+  const defaultFilter: any[] = config.filter ?? []
+  const filter: Ref<any[]> = ref(defaultFilter)
+  const initFilter = async () => {
+    filter.value = await getFilter(moduleName, defaultFilter)
+  }
+  const updateFilter = () => {
+    filter.value = customMap[moduleName].filter ?? defaultFilter
+  }
+  if (filterFlag) {
+    initFilter()
+  }
 
   /**
    * 操作按钮
@@ -50,7 +63,10 @@ export default function useCustom(name: string, config: Config): CustomControlle
       if (columnsFlag) {
         updateColumns()
       }
+      if (filterFlag) {
+        updateFilter()
+      }
     }
   })
-  return { columns }
+  return { columns, filter }
 }

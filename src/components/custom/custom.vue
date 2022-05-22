@@ -5,7 +5,9 @@
       <a-tab-pane v-if="columns !== undefined" key="column" tab="表格列">
         <columnsConfigVue ref="columnsConfigRef" />
       </a-tab-pane>
-      <a-tab-pane v-if="filter !== undefined" key="filter" tab="搜索项" force-render>搜索项</a-tab-pane>
+      <a-tab-pane v-if="filter !== undefined" key="filter" tab="搜索项" force-render>
+        <filterConfigVue ref="filterConfigRef" />
+      </a-tab-pane>
       <a-tab-pane v-if="button !== undefined" key="button" tab="操作按钮">操作按钮</a-tab-pane>
     </a-tabs>
   </a-modal>
@@ -15,6 +17,7 @@
 import useFlag from '@/composition/hooks/useFlag'
 import { nextTick, provide, ref, Ref, toRefs } from 'vue'
 import columnsConfigVue from './columnsConfig.vue'
+import filterConfigVue from './filterConfig.vue'
 
 /**
  * 父组件传参接收
@@ -44,11 +47,16 @@ const activeKey: Ref<'column' | 'filter' | 'button'> = ref(
 // 打开配置
 const [visible, { set: setVisible }] = useFlag(false)
 const columnsConfigRef: Ref<typeof columnsConfigVue | null> = ref(null)
+const filterConfigRef: Ref<typeof filterConfigVue | null> = ref(null)
+
 const openConfigFn = () => {
   setVisible(true)
   nextTick(() => {
     if (columns !== undefined) {
       columnsConfigRef.value?.initColumns()
+    }
+    if (filter !== undefined) {
+      filterConfigRef.value?.initFilter()
     }
   })
 }
@@ -59,7 +67,7 @@ const okFn = () => {
     columnsConfigRef.value?.updateColumns()
   }
   if (activeKey.value === 'filter') {
-    console.log('filter提交')
+    filterConfigRef.value?.updateFilter()
   }
   if (activeKey.value === 'button') {
     console.log('button提交')

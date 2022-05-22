@@ -44,13 +44,12 @@ export const useCustomStore = defineStore({
       setItem('customMap', this.customMap)
       message.success('保存成功')
     },
-    async getOption(moduleName: string, columns: TableColumnProps[]) {
+    async getOption(moduleName: string) {
       // 从map获取
       let option: CustomOption | undefined = this.customMap[moduleName]
       if (option) return option
       // 从本地或者数据库获取，并更新到map
       option = await this.getOptionFromDB(moduleName)
-      this.defaultMap[moduleName] = { column: columns, filter: [], button: [] }
       this.customMap[moduleName] = option
       return option
     },
@@ -59,9 +58,26 @@ export const useCustomStore = defineStore({
       this.setOptionToDB()
     },
     async getColumn(moduleName: string, columns: TableColumnProps[]): Promise<TableColumnProps[]> {
-      const option = await this.getOption(moduleName, columns)
-      console.log(option)
+      const option = await this.getOption(moduleName)
+      if (this.defaultMap[moduleName] === undefined) {
+        this.defaultMap[moduleName] = { column: columns, filter: [], button: [] }
+      } else {
+        this.defaultMap[moduleName].column = columns
+      }
       return [...(option?.column ?? columns)]
+    },
+    setFilter(moduleName: string, filter: any[]) {
+      this.customMap[moduleName].filter = [...filter]
+      this.setOptionToDB()
+    },
+    async getFilter(moduleName: string, filter: any[]): Promise<any[]> {
+      const option = await this.getOption(moduleName)
+      if (this.defaultMap[moduleName] === undefined) {
+        this.defaultMap[moduleName] = { filter: filter, column: [], button: [] }
+      } else {
+        this.defaultMap[moduleName].filter = filter
+      }
+      return [...(option?.filter ?? filter)]
     }
   }
 })

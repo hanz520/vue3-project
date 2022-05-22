@@ -1,11 +1,11 @@
 <template>
   <div class="app-section">
-    <Search ref="searchRef" :config="searchConfig" @search="doSearchFn"></Search>
+    <Search ref="searchRef" :config="filter" @search="doSearchFn"></Search>
   </div>
   <div class="app-section">
     <div class="app-btntool">
       <a-space>
-        <customVue module-name="user" :columns="defaultColumns" />
+        <customVue module-name="user" :columns="defaultColumns" :filter="defaultFilter" />
         <a-button type="primary" @click="addEditUserFn(null)">新建用户</a-button>
       </a-space>
     </div>
@@ -68,7 +68,7 @@ import { User } from './user'
  * 搜索模块功能
  */
 const searchRef: Ref<typeof Search | null> = ref(null)
-const data: SearchConfig[] = [
+const defaultFilter: SearchConfig[] = [
   { type: 'input', name: 'username', label: '用户名' },
   { type: 'input', name: 'phone', label: '手机号' },
   { type: 'input', name: 'realName', label: '昵称' },
@@ -85,7 +85,10 @@ const data: SearchConfig[] = [
     ]
   }
 ]
-let searchConfig: Ref<SearchConfig[]> = ref(data)
+
+const { filter } = customVue.useCustom('user', { filter: defaultFilter })
+
+// let searchConfig: Ref<SearchConfig[]> = ref(data)
 const doSearchFn = () => {
   if (pagination) pagination.current = 1
   getListFn()
