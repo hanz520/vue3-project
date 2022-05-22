@@ -10,19 +10,37 @@
     {{ col.title }}
   </a-checkable-tag>
   <a-divider orientation="left" orientation-margin="0px">列顺序</a-divider>
-  <a-tag
+  <!-- <a-tag
     v-for="col in selectedColumns"
     :key="col.dataIndex"
     :color="hasFixed(col) ? 'error' : 'success'"
     :class="{ 'custom-drag': !hasFixed(col) }"
     >{{ col.title }}</a-tag
+  > -->
+  <draggable
+    :list="selectedColumns"
+    ghost-class="ghost"
+    filter=".not-drag"
+    :animation="300"
+    item-key="dataIndex"
+    :move="onMove"
   >
+    <template #item="{ element: col }">
+      <a-tag
+        :key="col.dataIndex"
+        :color="hasFixed(col) ? 'error' : 'success'"
+        :class="{ 'custom-drag': !hasFixed(col), 'not-drag': hasFixed(col) }"
+        >{{ col.title }}</a-tag
+      >
+    </template>
+  </draggable>
 </template>
 
 <script lang="ts" setup>
 import { useCustomStore } from '@/store'
 import { message, TableColumnProps } from 'ant-design-vue'
 import { inject, ref, Ref, toRaw } from 'vue'
+import draggable from 'vuedraggable'
 
 const moduleName = inject('moduleName') as Ref<string>
 const columns = inject('columns') as Ref<any[]>
@@ -76,6 +94,13 @@ const columnChangeFn = (col: any, checked: boolean) => {
     selectedColumns.value.splice(index, 1)
   }
 }
+
+// 拖拽操作:禁止拖拽到带有fixed的项目
+const onMove = (e: any) => {
+  if (e.relatedContext.element.fixed) return false
+  return true
+}
+
 defineExpose({ initColumns, updateColumns })
 </script>
 
@@ -83,5 +108,12 @@ defineExpose({ initColumns, updateColumns })
 .custom-drag {
   cursor: move;
   user-select: none;
+  transition: none;
+}
+.not-drag {
+  cursor: not-allowed;
+}
+.ghost {
+  opacity: 0.3;
 }
 </style>
