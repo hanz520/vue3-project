@@ -34,6 +34,9 @@
       >
     </template>
   </draggable>
+  <div style="margin-top: 20px">
+    <a-tag color="error">Tips：红色为固定列，不允许参与排序</a-tag>
+  </div>
 </template>
 
 <script lang="ts" setup>
